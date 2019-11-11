@@ -22,6 +22,12 @@ To run the app:
 npm start
 ```
 
+To run the linter:
+
+```
+npm run lint
+```
+
 ### Project Infos
 * **Date:** 4th Year, 1st Semester, 2019/2012
 * **Course:** Sistemas de Informação (SINF) | Information Systems
