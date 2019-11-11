@@ -2,6 +2,26 @@
 
 Project developed in the SINF (Information Systems) course classes.
 
+### Gettings Started
+
+To setup the project, install all dependencies:
+
+```
+npm i
+```
+
+To run the tests:
+
+```
+npm test
+```
+
+To run the app:
+
+```
+npm start
+```
+
 ### Project Infos
 * **Date:** 4th Year, 1st Semester, 2019/2012
 * **Course:** Sistemas de Informação (SINF) | Information Systems
