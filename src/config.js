@@ -1,6 +1,8 @@
 require("dotenv-flow").config();
 
 export default {
-    apiUri: process.env.API_URI,
-    token: process.env.TOKEN,
+    sinfClientSecret: process.env.REACT_APP_SINF_CLIENT_SECRET,
+    apiUrl: process.env.REACT_APP_API_URL,
+    tenant: process.env.REACT_APP_TENANT,
+    organization: process.env.REACT_APP_ORGANIZATION,
 };

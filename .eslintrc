@@ -102,7 +102,6 @@
             "before": false,
         }],
         "brace-style": ["error", "1tbs"],
-        "camelcase": "error",
 
         // ES6
         "arrow-spacing": "error",

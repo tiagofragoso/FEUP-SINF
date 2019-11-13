@@ -42,6 +42,7 @@ const Homepage = () => {
                 <Table dataSource={dataSource} columns={columns}/>
             </div>
             <Link to="example">Example Page!</Link>
+            <Link to="sales">Get me to Sales!</Link>
         </div>
     );
 };

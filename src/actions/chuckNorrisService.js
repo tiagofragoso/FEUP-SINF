@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { addQuote, setQuoteLoading, setQuoteError } from "./quoteActions";
 
 export const loadQuote = () => async (dispatch) => {
@@ -7,7 +5,7 @@ export const loadQuote = () => async (dispatch) => {
     dispatch(setQuoteLoading(true));
 
     try {
-        const res = await axios.get("https://api.chucknorris.io/jokes/random");
+        const res = await fetch("https://api.chucknorris.io/jokes/random");
 
         if (res.status !== 200) {
             dispatch(setQuoteError({
@@ -19,7 +17,9 @@ export const loadQuote = () => async (dispatch) => {
             return;
         }
 
-        dispatch(addQuote(res.data.value));
+        const data = await res.json();
+
+        dispatch(addQuote(data.value));
         dispatch(setQuoteLoading(false));
 
     } catch (error) {
