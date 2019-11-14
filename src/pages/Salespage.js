@@ -42,7 +42,7 @@ const table_columns = [
         key: "buyerCustomerPartyName",
     },
     {
-        title: "Total",
+        title: "Total (€)",
         dataIndex: "payableAmount.amount",
         key: "payableAmount.amount",
     },
@@ -83,8 +83,8 @@ const Homepage = () => {
     return (
         <>
             {error && <Alert message="Error!" type="error" />}
-            <Spin spinning={loading} size="large" tip="Loading Sales Orders...">
-                <Table dataSource={sales_orders} columns={table_columns}/>
+            <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Orders...">
+                <Table dataSource={sales_orders} columns={table_columns} rowKey="id" />
             </Spin>
         </>
     );
