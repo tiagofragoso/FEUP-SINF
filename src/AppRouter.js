@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 
 import Homepage from "./pages/Homepage";
 import Examplepage from "./pages/Examplepage";
-import Salespage from "./pages/Salespage";
+import SalesOrdersPage from "./pages/SalesOrdersPage";
+import SalesOrderPage from "./pages/SalesOrderPage";
 import { login } from "./actions/loginService";
 
 const AppRouter = () => {
@@ -18,7 +19,9 @@ const AppRouter = () => {
         <Router>
             <Homepage path="/" />
             <Examplepage path="example" />
-            <Salespage path="sales" />
+            <SalesOrdersPage path="sales" />
+            <SalesOrderPage path="sales/:order_id" />
+            {/* btw missing 404 page */}
         </Router>
     );
 };

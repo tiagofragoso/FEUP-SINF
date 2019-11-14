@@ -1,24 +1,13 @@
 import React, { useEffect } from "react";
-import { Table, Spin, Alert, Tag } from "antd";
+import { Table, Spin, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "@reach/router";
 
 import { getSalesOrders } from "../actions/salesService";
-import { documentLinesToState, OrderState } from "../utils/jasminParsing";
+import OrderStatusLabel from "../components/OrderStatusLabel";
 
-const Status = (_, { documentLines }) => {
-    const state = documentLinesToState(documentLines);
 
-    switch (state) {
-        case OrderState.PARTIAL:
-            return <Tag color="gold">Partial</Tag>;
-        case OrderState.PENDING:
-            return <Tag color="purple">Pending</Tag>;
-        case OrderState.SENT:
-            return <Tag color="green">Sent</Tag>;
-        default:
-            return <Tag color="red">Other</Tag>;
-    }
-};
+const IdWithLink = (id) => <Link to={id}>{id}</Link>;
 
 const table_columns = [
     {
@@ -30,6 +19,7 @@ const table_columns = [
         title: "Order ID",
         dataIndex: "id",
         key: "id",
+        render: IdWithLink,
     },
     {
         title: "Entity",
@@ -49,7 +39,7 @@ const table_columns = [
     {
         title: "Status",
         key: "status",
-        render: Status,
+        render: OrderStatusLabel,
     },
     {
         title: "Address",
@@ -58,7 +48,7 @@ const table_columns = [
     },
 ];
 
-const Homepage = () => {
+const SalesOrdersPage = () => {
     const dispatch = useDispatch();
     const {
         sales_orders, loading, error,
@@ -90,4 +80,4 @@ const Homepage = () => {
     );
 };
 
-export default Homepage;
+export default SalesOrdersPage;
