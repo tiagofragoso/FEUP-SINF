@@ -36,7 +36,8 @@ export const getSalesOrder = (id) => async (dispatch, getState) => {
 
         if (res.status !== 200) {
             console.error("getting sales order failed:", res.status);
-            dispatch(setCurrentSalesOrderError("idk"));
+            const data = await res.json();
+            dispatch(setCurrentSalesOrderError(data));
             dispatch(setCurrentSalesOrderLoading(false));
             return;
         }

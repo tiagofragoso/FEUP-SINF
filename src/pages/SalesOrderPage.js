@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Typography, Row, Col, Table, Spin, Alert, Tag } from "antd";
+import { Typography, Row, Col, Table, Spin, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 import { getSalesOrder } from "../actions/salesService";
 
@@ -34,47 +35,48 @@ const SalesOrderPage = ({ order_id }) => {
 
     return (
         <>
-            {error && <Alert message="Error!" type="error" />}
+            {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
                 <Typography.Title>Order details</Typography.Title>
-                <Row>
-                    <Col span={12}>
+                <Row type="flex" justify="space-between">
+                    <Col span={8}>
                         <Typography.Title level={4}>{order_id}</Typography.Title>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         {order && <Typography.Text>{order.documentDate}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={12}>
+                <Row type="flex" justify="space-between">
+                    <Col span={8}>
                         {order && <Typography.Text>{order.buyerCustomerParty}</Typography.Text>}
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         {order && <Typography.Text>{order.buyerCustomerPartyName}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={12}>
+                <Row type="flex" justify="space-between">
+                    <Col span={8}>
                         {order && <Typography.Text>{order.unloadingPoint}</Typography.Text>}
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         {order && <Typography.Text>{order.unloadingPointAddress}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={12}>
+                <Row type="flex" justify="space-between">
+                    <Col span={8}>
                         {order && <Typography.Text>{order.emailTo}</Typography.Text>}
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         {order && <Typography.Text>{order.unloadingPostalZone}</Typography.Text>}
                     </Col>
                 </Row>
 
                 {items &&
                 <>
-                    <Typography.Title level={4}>Picked (x)</Typography.Title>
+                    <br/>
+                    <Typography.Title level={4}>Not Shipped ({items.not_shipped.length})</Typography.Title>
                     <Table
-                        dataSource={items.picked} columns={[
+                        dataSource={items.not_shipped} columns={[
                             {
                                 title: "",
                                 dataIndex: "image_stuff",
@@ -85,6 +87,11 @@ const SalesOrderPage = ({ order_id }) => {
                                 title: "Item",
                                 dataIndex: "salesItem",
                                 key: "salesItem",
+                            },
+                            {
+                                title: "Description",
+                                dataIndex: "description",
+                                key: "description",
                             },
                             {
                                 title: "Quantity",
@@ -98,15 +105,49 @@ const SalesOrderPage = ({ order_id }) => {
                             },
                         ]} rowKey="salesItem"
                     />
-                    <Typography.Title level={4}>Awaiting picking (x)</Typography.Title>
-                    <Typography.Title level={4}>Awaiting restocking (x)</Typography.Title>
-                    <Typography.Title level={4}>Shipped (x)</Typography.Title>
+
+                    <br/>
+                    <Typography.Title level={4}>Shipped ({items.shipped.length})</Typography.Title>
+                    <Table
+                        dataSource={items.shipped} columns={[
+                            {
+                                title: "",
+                                dataIndex: "image_stuff",
+                                key: "image_stuff",
+                                // render: img,
+                            },
+                            {
+                                title: "Item",
+                                dataIndex: "salesItem",
+                                key: "salesItem",
+                            },
+                            {
+                                title: "Description",
+                                dataIndex: "description",
+                                key: "description",
+                            },
+                            {
+                                title: "Quantity",
+                                dataIndex: "quantity",
+                                key: "quantity",
+                            },
+                            {
+                                title: "Total",
+                                dataIndex: "lineExtensionAmount.amount",
+                                key: "lineExtensionAmount.amount",
+                            },
+                        ]} rowKey="salesItem"
+                    />
                 </>
                 }
 
             </Spin>
         </>
     );
+};
+
+SalesOrderPage.propTypes = {
+    order_id: PropTypes.string.isRequired,
 };
 
 export default SalesOrderPage;

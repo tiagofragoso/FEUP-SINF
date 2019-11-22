@@ -41,11 +41,6 @@ const table_columns = [
         key: "status",
         render: OrderStatusLabel,
     },
-    {
-        title: "Address",
-        dataIndex: "unloadingPoint",
-        key: "unloadingPoint",
-    },
 ];
 
 const SalesOrdersPage = () => {
@@ -72,7 +67,7 @@ const SalesOrdersPage = () => {
 
     return (
         <>
-            {error && <Alert message="Error!" type="error" />}
+            {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Orders...">
                 <Table dataSource={sales_orders} columns={table_columns} rowKey="id" />
             </Spin>

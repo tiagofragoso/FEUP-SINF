@@ -3,7 +3,11 @@ import { Tag } from "antd";
 
 import { documentLinesToState, OrderState } from "../utils/jasminParsing";
 
-const OrderStatusLabel = (_, { documentLines }) => {
+const OrderStatusLabel = (_, { isDeleted, documentLines }) => {
+    if (isDeleted) {
+        return <Tag color="red">Cancelled</Tag>;
+    }
+
     const state = documentLinesToState(documentLines);
 
     switch (state) {
@@ -14,7 +18,7 @@ const OrderStatusLabel = (_, { documentLines }) => {
         case OrderState.SENT:
             return <Tag color="green">Sent</Tag>;
         default:
-            return <Tag color="red">Other</Tag>;
+            return <Tag color="cyan">Other</Tag>;
     }
 };
 

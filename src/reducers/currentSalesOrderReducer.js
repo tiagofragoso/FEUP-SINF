@@ -2,19 +2,7 @@ import { currentSalesOrderTypes } from "../actions/currentSalesOrderActions";
 
 const initialState = {
     order: null,
-    items: {
-        picked: [
-            {
-                salesItem: "IT_123",
-                description: "The quick brown fox jumps over the lazy Web API",
-                quantity: 1,
-                lineExtensionAmount: {
-                    amount: 1001,
-                },
-            },
-
-        ],
-    },
+    items: null,
     loading: false,
     error: false,
 };
@@ -25,6 +13,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 order: action.payload,
+                items: {
+                    shipped: action.payload.documentLines
+                        .map((item) => ({ ...item, quantity: item.deliveredQuantity }))
+                        .filter((item) => item.quantity > 0),
+                    not_shipped: action.payload.documentLines
+                        .map((item) => ({ ...item, quantity: item.quantity - item.deliveredQuantity }))
+                        .filter((item) => item.quantity > 0),
+                },
             };
         case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER_LOADING:
             return {
