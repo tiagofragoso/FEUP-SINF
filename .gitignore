@@ -67,7 +67,6 @@ bower_components
 build/Release
 
 # Dependency directories
-fe/node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -139,3 +138,6 @@ sketch
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+
+# database
+*.db
