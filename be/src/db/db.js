@@ -8,6 +8,9 @@ if (!process.env.DB_PATH) {
 const db = new Sequelize({
     dialect: "sqlite",
     storage: process.env.DB_PATH,
+    define: {
+        timestamps: false,
+    },
 });
 
 db.authenticate()
