@@ -6,11 +6,11 @@ module.exports = (app) => {
     // Health check endpoint
     app.get("/", (_, res) => res.status(200).json({ "online": true }));
 
-    app.use(express.urlencoded({ extended: true }));
-
-    // Register API Routes
-    app.use(api_routes());
+    app.use(express.json());
 
     // Cors middleware to accept request from all origins
     app.use(cors_middleware());
+
+    // Register API Routes
+    app.use(api_routes());
 };

@@ -3,6 +3,7 @@ const { check, validationResult } = require("express-validator");
 const router = Router();
 const picking_wave = require("../../models/picking_wave");
 const item = require("../../models/item");
+const { flattenQueryResults } = require("../../utils");
 
 module.exports = (app) => {
     app.use("/picking-wave", router);
@@ -12,15 +13,10 @@ module.exports = (app) => {
      * @returns {200} Success
      * @returns {500} Internal Error
      */
-    router.get("/", (_, res) => {
-        picking_wave.findAll()
-            .then((query_res) => {
-                const picking_waves = query_res.map(({ dataValues }) => dataValues);
-                res.json(picking_waves);
-            })
-            .catch(() => {
-                res.status(500).send("Failure");
-            });
+    router.get("/", async (_, res) => {
+        const picking_waves = await picking_wave.findAll();
+
+        return res.json(flattenQueryResults(picking_waves));
     });
 
     /**
@@ -30,27 +26,22 @@ module.exports = (app) => {
      * @returns {400} Bad Request
      * @returns {500} Internal Error
      */
-    router.get("/:id", (req, res) => {
+    router.get("/:id", async (req, res) => {
         const { id } = req.params;
 
         if (isNaN(id)) {
-            res.status(400);
-            res.send("The picking order id must be an Integer");
-            return;
+            return res
+                .status(400)
+                .send("The picking order id must be an Integer");
         }
 
-        item.findAll({
+        const items = await item.findAll({
             where: {
                 picking_wave: parseInt(id, 10),
             },
-        })
-            .then((query_res) => {
-                const items = query_res.map(({ dataValues }) => dataValues);
-                res.json(items);
-            })
-            .catch(() => {
-                res.status(500).send("Failure");
-            });
+        });
+
+        return res.json(flattenQueryResults(items));
     });
 
     /**
@@ -64,15 +55,15 @@ module.exports = (app) => {
     router.post("/", [
         check("name", "Picking Wave name is mandatory").not().isEmpty(),
         check("due_date", "Picking Wave due date is mandatory").not().isEmpty(),
-    ], (req, res) => {
+    ], async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422);
-            res.json(errors.array());
-            return;
+            return res
+                .status(422)
+                .json(errors.array());
         }
 
-        picking_wave.create(
+        await picking_wave.create(
             {
                 name: req.body.name,
                 due_date: req.body.due_date,
@@ -80,8 +71,8 @@ module.exports = (app) => {
             {
                 fields: ["name", "due_date"],
             },
-        )
-            .then(() => res.status(201).send())
-            .catch(() => res.status(500).send("Failure"));
+        );
+
+        return res.status(201).send();
     });
 };

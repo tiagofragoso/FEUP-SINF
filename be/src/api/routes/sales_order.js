@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const item = require("../../models/item");
+const { flattenQueryResults } = require("../../utils");
 
 module.exports = (app) => {
     app.use("/sales-order", router);
@@ -11,20 +12,15 @@ module.exports = (app) => {
      * @returns {200} Success
      * @returns {500} Internal Error
      */
-    router.get("/:id/picked-items", (req, res) => {
+    router.get("/:id/picked-items", async (req, res) => {
         const { id } = req.params;
 
-        item.findAll({
+        const items = await item.findAll({
             where: {
                 sales_order: id,
             },
-        })
-            .then((query_res) => {
-                const items = query_res.map(({ dataValues }) => dataValues);
-                res.json(items);
-            })
-            .catch(() => {
-                res.status(500).send("Failure");
-            });
+        });
+
+        return res.json(flattenQueryResults(items));
     });
 };
