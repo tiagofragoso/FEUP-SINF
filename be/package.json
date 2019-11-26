@@ -4,6 +4,7 @@
   "description": "sinfony backend",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src --max-warnings 0",
     "lint-fix": "npm run lint -- --fix"
