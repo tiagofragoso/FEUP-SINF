@@ -4,6 +4,7 @@ const picking_wave = require("../../models/picking_wave");
 const item = require("../../models/item");
 const { flattenQueryResults } = require("../../utils");
 const picking_wave_validators = require("../middlewares/validators/picking_wave");
+const item_validators = require("../middlewares/validators/item");
 
 module.exports = (app) => {
     app.use("/picking-wave", router);
@@ -35,16 +36,10 @@ module.exports = (app) => {
     /**
      * Marks a picking wave as done
      */
-    router.put("/:id/finish", picking_wave_validators.get, async (req, res) => {
-        const { id } = req.params;
+    router.put("/:id/finish", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
+        const { pwave } = req.locals;
 
-        const p = await picking_wave.findByPk(id);
-
-        if (!p) {
-            return res.status(404).send();
-        }
-
-        p.update({
+        pwave.update({
             is_done: true,
         });
 
@@ -64,6 +59,30 @@ module.exports = (app) => {
             },
             {
                 fields: ["name", "due_date"],
+            },
+        );
+
+        return res.status(201).send();
+    });
+
+    router.patch("/:id", picking_wave_validators.addItem, picking_wave_validators.exists, item_validators.isUnique, async (req, res) => {
+        const { id } = req.params;
+
+        const {
+            item_key, sales_order, name, warehouse, quantity,
+        } = req.body;
+
+        await item.create(
+            {
+                item_key,
+                picking_wave: id,
+                sales_order,
+                name,
+                warehouse,
+                quantity,
+            },
+            {
+                fields: ["item_key", "picking_wave", "sales_order", "name", "warehouse", "quantity"],
             },
         );
 
