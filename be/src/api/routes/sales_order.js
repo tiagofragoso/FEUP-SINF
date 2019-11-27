@@ -2,17 +2,15 @@ const { Router } = require("express");
 const router = Router();
 const item = require("../../models/item");
 const { flattenQueryResults } = require("../../utils");
+const sales_order_validators = require("../middlewares/validators/sales_order");
 
 module.exports = (app) => {
     app.use("/sales-order", router);
 
     /**
      * Gets picked items for a sales order
-     * @param {String} id Sales Order id
-     * @returns {200} Success
-     * @returns {500} Internal Error
      */
-    router.get("/:id/picked-items", async (req, res) => {
+    router.get("/:id/picked-items", sales_order_validators.get, async (req, res) => {
         const { id } = req.params;
 
         const items = await item.findAll({
