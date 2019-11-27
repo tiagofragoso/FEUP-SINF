@@ -33,6 +33,25 @@ module.exports = (app) => {
     });
 
     /**
+     * Marks a picking wave as done
+     */
+    router.put("/:id/finish", picking_wave_validators.get, async (req, res) => {
+        const { id } = req.params;
+
+        const p = await picking_wave.findByPk(id);
+
+        if (!p) {
+            return res.status(404).send();
+        }
+
+        p.update({
+            is_done: true,
+        });
+
+        return res.status(200).send();
+    });
+
+    /**
      * Creates a new picking wave
      */
     router.post("/", picking_wave_validators.create, async (req, res) => {
