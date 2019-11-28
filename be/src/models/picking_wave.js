@@ -18,7 +18,7 @@ const picking_wave = db.define("picking_waves", {
     is_done: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: "false",
     },
 });
 

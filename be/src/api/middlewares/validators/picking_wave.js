@@ -38,10 +38,6 @@ const addItem = useExpressValidators([
         .exists().withMessage("Item Name must be specified").bail()
         .isString().withMessage("Item Name must be a String"),
 
-    body("warehouse")
-        .exists().withMessage("Item Warehouse must be specified").bail()
-        .isString().withMessage("Warehouse must be a String"),
-
     body("quantity")
         .exists().withMessage("Item Quantity must be specified").bail()
         .isInt({

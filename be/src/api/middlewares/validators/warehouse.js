@@ -38,8 +38,20 @@ const exists = async (req, res, next) => {
     return next();
 };
 
+const isUnique = async (req, res, next) => {
+    const { id } = req.body;
+
+    const w = await warehouse.findByPk(id);
+    if (w) {
+        return res.status(400).send("Warehouse already exists");
+    }
+
+    return next();
+};
+
 module.exports = {
     get,
     create,
     exists,
+    isUnique,
 };

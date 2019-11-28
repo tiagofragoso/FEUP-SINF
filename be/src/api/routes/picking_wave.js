@@ -5,15 +5,33 @@ const item = require("../../models/item");
 const { flattenQueryResults } = require("../../utils");
 const picking_wave_validators = require("../middlewares/validators/picking_wave");
 const item_validators = require("../middlewares/validators/item");
+const { Op } = require("sequelize");
 
 module.exports = (app) => {
     app.use("/picking-wave", router);
 
     /**
-     * Gets all the Picking Waves
+     * Gets all the in progress Picking Waves
      */
     router.get("/", async (_, res) => {
-        const picking_waves = await picking_wave.findAll();
+        const picking_waves = await picking_wave.findAll({
+            where: {
+                [Op.or]: [{ is_done: "false" }, { is_done: 0 }],
+            },
+        });
+
+        return res.json(flattenQueryResults(picking_waves));
+    });
+
+    /**
+     * Gets all the finished Picking Waves
+     */
+    router.get("/finished", async (_, res) => {
+        const picking_waves = await picking_wave.findAll({
+            where: {
+                [Op.or]: [{ is_done: "true" }, { is_done: 1 }],
+            },
+        });
 
         return res.json(flattenQueryResults(picking_waves));
     });
@@ -21,7 +39,7 @@ module.exports = (app) => {
     /**
      * Gets all Items in a Picking Wave
      */
-    router.get("/:id", picking_wave_validators.get, picking_wave_validators.exists, async (req, res) => {
+    router.get("/:id/items", picking_wave_validators.get, picking_wave_validators.exists, async (req, res) => {
         const { id } = req.params;
 
         const items = await item.findAll({

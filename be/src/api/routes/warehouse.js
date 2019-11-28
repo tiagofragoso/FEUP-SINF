@@ -28,7 +28,7 @@ module.exports = (app) => {
     /**
      * Creates a new Warehouse
      */
-    router.post("/", warehouse_validators.create, async (req, res) => {
+    router.post("/", warehouse_validators.create, warehouse_validators.isUnique, async (req, res) => {
         const { id, x, y } = req.body;
 
         await warehouse.create(
