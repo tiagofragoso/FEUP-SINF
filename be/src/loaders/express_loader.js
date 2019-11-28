@@ -1,6 +1,6 @@
-const api_routes = require("./api/");
+const api_routes = require("../api");
 const express = require("express");
-const cors_middleware = require("./api/middlewares/cors");
+const cors_middleware = require("../api/middlewares/cors");
 
 module.exports = (app) => {
     // Health check endpoint

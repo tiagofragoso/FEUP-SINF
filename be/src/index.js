@@ -1,7 +1,7 @@
 require("dotenv-flow").config();
 const express = require("express");
 const app = express();
-const express_loader = require("./express_loader");
+const express_loader = require("./loaders/express_loader");
 
 const DEFAULT_PORT = 3000;
 

@@ -3,6 +3,7 @@ const router = Router();
 const warehouse = require("../../models/warehouse");
 const { flattenQueryResults } = require("../../utils");
 const warehouse_validators = require("../middlewares/validators/warehouse");
+const { getPickingWavePath } = require("../../lib/path");
 
 module.exports = (app) => {
     app.use("/warehouse", router);
@@ -49,9 +50,12 @@ module.exports = (app) => {
      * Gets Warehouses visit path
      */
     router.get("/path/calculate", warehouse_validators.path, warehouse_validators.allExist, (req, res) => {
+        const { warehouses } = req.locals;
 
-        console.log(JSON.stringify(req.locals.warehouses, null, 2));
+        const path = getPickingWavePath([...warehouses]);
 
-        return res.json();
+        return res.json({
+            path,
+        });
     });
 };
