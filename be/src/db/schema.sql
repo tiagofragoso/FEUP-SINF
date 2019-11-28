@@ -18,5 +18,12 @@ CREATE TABLE items (
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0
 );
 
+DROP TABLE IF EXISTS warehouses;
+CREATE TABLE warehouses (
+    id TEXT PRIMARY KEY,
+    x INTEGER NOT NULL,
+    y INTEGER NOT NULL
+);
+
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
