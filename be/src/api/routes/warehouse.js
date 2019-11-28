@@ -19,14 +19,10 @@ module.exports = (app) => {
     /**
      * Gets Warehouse information
      */
-    router.get("/:id", warehouse_validators.get, warehouse_validators.exists, async (req, res) => {
-        const { id } = req.params;
+    router.get("/:id", warehouse_validators.get, warehouse_validators.exists, (req, res) => {
+        const { w } = req.locals;
 
-        const w = await warehouse.findAll({
-            where: { id },
-        });
-
-        return res.json(flattenQueryResults(w));
+        return res.json(w);
     });
 
     /**
