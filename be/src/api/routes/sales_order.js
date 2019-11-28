@@ -8,7 +8,7 @@ module.exports = (app) => {
     app.use("/sales-order", router);
 
     /**
-     * Gets picked items for a sales order
+     * Gets picked Items for a Sales Order
      */
     router.get("/:id/picked-items", sales_order_validators.get, async (req, res) => {
         const { id } = req.params;

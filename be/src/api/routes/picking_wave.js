@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.use("/picking-wave", router);
 
     /**
-     * Gets all the picking waves
+     * Gets all the Picking Waves
      */
     router.get("/", async (_, res) => {
         const picking_waves = await picking_wave.findAll();
@@ -19,7 +19,7 @@ module.exports = (app) => {
     });
 
     /**
-     * Gets all items in a picking wave
+     * Gets all Items in a Picking Wave
      */
     router.get("/:id", picking_wave_validators.get, picking_wave_validators.exists, async (req, res) => {
         const { id } = req.params;
@@ -34,7 +34,7 @@ module.exports = (app) => {
     });
 
     /**
-     * Marks a picking wave as done
+     * Marks a Picking Wave as done
      */
     router.put("/:id/finish", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
         const { pwave } = req.locals;
@@ -47,7 +47,7 @@ module.exports = (app) => {
     });
 
     /**
-     * Creates a new picking wave
+     * Creates a new Picking Wave
      */
     router.post("/", picking_wave_validators.create, async (req, res) => {
         const { name, due_date } = req.body;
@@ -65,6 +65,9 @@ module.exports = (app) => {
         return res.status(201).send();
     });
 
+    /**
+     * Adds new Items to Picking Wave
+     */
     router.patch("/:id", picking_wave_validators.addItem, picking_wave_validators.exists, item_validators.isUnique, async (req, res) => {
         const { id } = req.params;
 
