@@ -44,4 +44,14 @@ module.exports = (app) => {
 
         return res.status(201).send();
     });
+
+    /**
+     * Gets Warehouses visit path
+     */
+    router.get("/path/calculate", warehouse_validators.path, warehouse_validators.allExist, (req, res) => {
+
+        console.log(JSON.stringify(req.locals.warehouses, null, 2));
+
+        return res.json();
+    });
 };

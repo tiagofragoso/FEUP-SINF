@@ -5,7 +5,9 @@ const isUnique = async (req, res, next) => {
 
     const i = await item.findByPk(item_key);
     if (i) {
-        return res.status(400).send("Item already exists");
+        return res.status(400).json({
+            reason: "Item already exists",
+        });
     }
 
     return next();

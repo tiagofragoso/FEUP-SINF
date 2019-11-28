@@ -25,6 +25,14 @@ const create = useExpressValidators([
         .toInt(),
 ]);
 
+const path = useExpressValidators([
+    body("warehouses")
+        .exists().withMessage("Warehouses must be specified").bail()
+        .isArray({
+            min: 1,
+        }).withMessage("Warehouses must be a non-empty Array"),
+]);
+
 const exists = async (req, res, next) => {
     const { id } = req.params;
 
@@ -38,12 +46,33 @@ const exists = async (req, res, next) => {
     return next();
 };
 
+const allExist = async (req, res, next) => {
+    const { warehouses } = req.body;
+
+    req.locals = req.locals || {};
+    req.locals.warehouses = [];
+
+    for (const warehouse_id of warehouses) {
+        const w = await warehouse.findByPk(warehouse_id);
+        if (!w) {
+            return res.status(404).json({
+                reason: `Warehouse ${warehouse_id} does not exist`,
+            });
+        }
+        req.locals.warehouses.push(w.dataValues);
+    }
+
+    return next();
+};
+
 const isUnique = async (req, res, next) => {
     const { id } = req.body;
 
     const w = await warehouse.findByPk(id);
     if (w) {
-        return res.status(400).send("Warehouse already exists");
+        return res.status(400).json({
+            reason: "Warehouse already exists",
+        });
     }
 
     return next();
@@ -54,4 +83,6 @@ module.exports = {
     create,
     exists,
     isUnique,
+    path,
+    allExist,
 };
