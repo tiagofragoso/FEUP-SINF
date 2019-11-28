@@ -23,10 +23,6 @@ const item = db.define("items", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    warehouse: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,

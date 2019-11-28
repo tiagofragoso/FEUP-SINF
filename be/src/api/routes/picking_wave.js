@@ -21,7 +21,7 @@ module.exports = (app) => {
     /**
      * Gets all items in a picking wave
      */
-    router.get("/:id", picking_wave_validators.get, async (req, res) => {
+    router.get("/:id", picking_wave_validators.get, picking_wave_validators.exists, async (req, res) => {
         const { id } = req.params;
 
         const items = await item.findAll({
@@ -69,7 +69,7 @@ module.exports = (app) => {
         const { id } = req.params;
 
         const {
-            item_key, sales_order, name, warehouse, quantity,
+            item_key, sales_order, name, quantity,
         } = req.body;
 
         await item.create(
@@ -78,11 +78,10 @@ module.exports = (app) => {
                 picking_wave: id,
                 sales_order,
                 name,
-                warehouse,
                 quantity,
             },
             {
-                fields: ["item_key", "picking_wave", "sales_order", "name", "warehouse", "quantity"],
+                fields: ["item_key", "picking_wave", "sales_order", "name", "quantity"],
             },
         );
 
