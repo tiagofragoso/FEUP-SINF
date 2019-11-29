@@ -18,8 +18,8 @@ CREATE TABLE items (
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0
 );
 
-DROP TABLE IF EXISTS warehouses;
-CREATE TABLE warehouses (
+DROP TABLE IF EXISTS warehouse_zones;
+CREATE TABLE warehouse_zones (
     id TEXT PRIMARY KEY,
     x INTEGER NOT NULL,
     y INTEGER NOT NULL

@@ -1,19 +1,19 @@
-const getPickingWavePath = (warehouses) => {
+const getPickingWavePath = (warehouse_zones) => {
     const path = [];
 
-    // Path starts with the warehouse closest to origin [0, 0] (which represents the warehouse entry point)
-    const closest_to_origin_index = getClosestWarehouseIndex({ x: 0, y: 0 }, warehouses);
-    path.push(warehouses.splice(closest_to_origin_index, 1)[0]);
+    // Path starts with the warehouse zone closest to origin [0, 0] (which represents the warehouse entry point)
+    const closest_to_origin_index = getClosestWarehouseZoneIndex({ x: 0, y: 0 }, warehouse_zones);
+    path.push(warehouse_zones.splice(closest_to_origin_index, 1)[0]);
 
-    while (warehouses.length > 0) {
-        const closest_index = getClosestWarehouseIndex(path[path.length - 1], warehouses);
-        path.push(warehouses.splice(closest_index, 1)[0]);
+    while (warehouse_zones.length > 0) {
+        const closest_index = getClosestWarehouseZoneIndex(path[path.length - 1], warehouse_zones);
+        path.push(warehouse_zones.splice(closest_index, 1)[0]);
     }
 
     return path;
 };
 
-const getClosestWarehouseIndex = (origin, others) => {
+const getClosestWarehouseZoneIndex = (origin, others) => {
     let closest_index = 0;
     let closest_distance = distance(origin, others[0]);
 

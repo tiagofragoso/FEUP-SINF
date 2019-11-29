@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db/db");
 
-const warehouse = db.define("warehouses", {
+const warehouse_zone = db.define("warehouse_zones", {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -17,4 +17,4 @@ const warehouse = db.define("warehouses", {
     },
 });
 
-module.exports = warehouse;
+module.exports = warehouse_zone;
