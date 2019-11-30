@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
         case warehouseTypes.SET_WAREHOUSES:
             return {
                 ...state,
-                warehouses: action.payload,
+                warehouses: action.payload.filter((warehouse) => warehouse.isActive),
             };
         case warehouseTypes.SET_WAREHOUSES_LOADING:
             return {
