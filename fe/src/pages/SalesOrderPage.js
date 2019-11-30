@@ -21,6 +21,7 @@ const SalesOrderPage = ({ order_id }) => {
             return;
         }
 
+        // TODO: Fix entering an errored page and when going to another it's still broken
         if (loading || error) {
             return;
         }
