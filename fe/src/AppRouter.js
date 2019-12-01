@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { Router } from "@reach/router";
 import { useDispatch } from "react-redux";
 
-import Homepage from "./pages/Homepage";
-import Examplepage from "./pages/Examplepage";
+import Layout from "./components/Layout";
 import SalesOrdersPage from "./pages/SalesOrdersPage";
 import SalesOrderPage from "./pages/SalesOrderPage";
 import { login } from "./actions/loginService";
@@ -18,10 +17,12 @@ const AppRouter = () => {
 
     return (
         <Router>
-            <Homepage path="/" />
-            <Examplepage path="example" />
-            <SalesOrdersPage path="sales" />
-            <SalesOrderPage path="sales/:order_id" />
+            <Layout path="/">
+                <SalesOrdersPage path="/" />
+                {/* Set Sales page as index for now */}
+                <SalesOrdersPage path="sales" />
+                <SalesOrderPage path="sales/:order_id" />
+            </Layout>
             {/* btw missing 404 page */}
             <WarehousesPage path="warehouses" />
         </Router>
