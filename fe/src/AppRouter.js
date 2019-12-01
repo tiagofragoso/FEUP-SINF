@@ -22,9 +22,9 @@ const AppRouter = () => {
                 {/* Set Sales page as index for now */}
                 <SalesOrdersPage path="sales" />
                 <SalesOrderPage path="sales/:order_id" />
+                <WarehousesPage path="warehouses" />
             </Layout>
             {/* btw missing 404 page */}
-            <WarehousesPage path="warehouses" />
         </Router>
     );
 };

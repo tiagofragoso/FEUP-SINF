@@ -3,6 +3,7 @@ import { Typography, Row, Col, Table, Spin, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
+import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
 
 const SalesOrderPage = ({ order_id }) => {
@@ -35,39 +36,43 @@ const SalesOrderPage = ({ order_id }) => {
 
 
     return (
-        <>
+        <PageLayout title="Sales Order">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
-                <Typography.Title>Order details</Typography.Title>
-                <Row type="flex" justify="space-between">
-                    <Col span={8}>
-                        <Typography.Title level={4}>{order_id}</Typography.Title>
+                <Row type="flex" justify="space-between" align="middle">
+                    <Col>
+                        <Typography.Text
+                            copyable={order_id}
+                            strong
+                        >
+                            {order_id}
+                        </Typography.Text>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {order && <Typography.Text>{order.documentDate}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row type="flex" justify="space-between">
-                    <Col span={8}>
+                <Row type="flex" justify="space-between" align="middle">
+                    <Col>
                         {order && <Typography.Text>{order.buyerCustomerParty}</Typography.Text>}
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {order && <Typography.Text>{order.buyerCustomerPartyName}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row type="flex" justify="space-between">
-                    <Col span={8}>
+                <Row type="flex" justify="space-between" align="middle">
+                    <Col>
                         {order && <Typography.Text>{order.unloadingPoint}</Typography.Text>}
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {order && <Typography.Text>{order.unloadingPointAddress}</Typography.Text>}
                     </Col>
                 </Row>
-                <Row type="flex" justify="space-between">
-                    <Col span={8}>
+                <Row type="flex" justify="space-between" align="middle">
+                    <Col>
                         {order && <Typography.Text>{order.emailTo}</Typography.Text>}
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         {order && <Typography.Text>{order.unloadingPostalZone}</Typography.Text>}
                     </Col>
                 </Row>
@@ -143,7 +148,7 @@ const SalesOrderPage = ({ order_id }) => {
                 }
 
             </Spin>
-        </>
+        </PageLayout>
     );
 };
 

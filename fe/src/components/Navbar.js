@@ -33,7 +33,7 @@ const Navbar = () => {
             selectedKeys={selectedKey}
         >
             <Menu.Item key="logo">
-                <img src={logo} height="30px" />
+                <img alt="logo" src={logo} height="30px" />
             </Menu.Item>
             <Menu.Item key="sales">
                 <SelectableLink

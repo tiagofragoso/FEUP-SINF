@@ -3,6 +3,7 @@ import { Table, Spin, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
+import PageLayout from "../components/PageLayout";
 import { getSalesOrders } from "../actions/salesService";
 import OrderStatusLabel from "../components/OrderStatusLabel";
 
@@ -66,12 +67,12 @@ const SalesOrdersPage = () => {
 
 
     return (
-        <>
+        <PageLayout title="Sales Orders">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Orders...">
                 <Table dataSource={sales_orders} columns={table_columns} rowKey="id" />
             </Spin>
-        </>
+        </PageLayout>
     );
 };
 
