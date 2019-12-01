@@ -14,25 +14,15 @@ const SalesOrderPage = ({ order_id }) => {
         access_token,
     } = useSelector((state) => state.login);
 
-    // If the sales order was not yet loaded or is not the correct one, load it
+    // useEffect with empty dependencies array functions simillarly to componentDidMount
     useEffect(() => {
         // Can't request info from api before the login is ready
         if (!access_token) {
             return;
         }
 
-        // TODO: Fix entering an errored page and when going to another it's still broken
-        if (loading || error) {
-            return;
-        }
-
-        if (order && order.id === order_id) {
-            return;
-        }
-
         dispatch(getSalesOrder(order_id));
-    }, [access_token, dispatch, error, loading, order, order_id]);
-
+    }, [access_token, dispatch, order_id]);
 
     return (
         <>

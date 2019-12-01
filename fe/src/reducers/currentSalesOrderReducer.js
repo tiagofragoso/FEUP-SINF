@@ -24,7 +24,8 @@ export default (state = initialState, action) => {
             };
         case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER_LOADING:
             return {
-                ...state,
+                // Spreading initialState instead of state to reset previous success or error data
+                ...(action.payload ? initialState : state),
                 loading: action.payload,
             };
         case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER_ERROR:
