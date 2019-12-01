@@ -7,6 +7,7 @@ import Examplepage from "./pages/Examplepage";
 import SalesOrdersPage from "./pages/SalesOrdersPage";
 import SalesOrderPage from "./pages/SalesOrderPage";
 import { login } from "./actions/loginService";
+import WarehousesPage from "./pages/WarehousesPage";
 
 const AppRouter = () => {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const AppRouter = () => {
             <SalesOrdersPage path="sales" />
             <SalesOrderPage path="sales/:order_id" />
             {/* btw missing 404 page */}
+            <WarehousesPage path="warehouses" />
         </Router>
     );
 };
