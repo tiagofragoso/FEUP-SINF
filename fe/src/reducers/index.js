@@ -3,6 +3,7 @@ import quoteReducer from "./quoteReducer";
 import loginReducer from "./loginReducer";
 import salesReducer from "./salesReducer";
 import currentSalesOrderReducer from "./currentSalesOrderReducer";
+import currentPurchaseOrderReducer from "./currentPurchaseOrderReducer";
 import warehousesReducer from "./warehousesReducer";
 import currentWarehouseReducer from "./currentWarehouseReducer";
 import purchasesReducer from "./purchasesReducer";
@@ -14,6 +15,7 @@ export default combineReducers({
     sales: salesReducer,
     purchases: purchasesReducer,
     currentSalesOrder: currentSalesOrderReducer,
+    currentPurchaseOrder: currentPurchaseOrderReducer,
     warehouses: warehousesReducer,
     currentWarehouse: currentWarehouseReducer,
 });
