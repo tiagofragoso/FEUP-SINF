@@ -1,78 +1,63 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "@reach/router";
 import { Menu, Icon } from "antd";
-import { any, string } from "prop-types";
+import { string } from "prop-types";
 
 import logo from "../assets/logo.png";
 
-const Navbar = () => {
-    const [selectedKey, selectKey] = useState(["sales"]);
-
-    const SelectableLink = ({ to, itemKey, children }) => (
-        <Link
-            to={to}
-            getProps={({ isCurrent }) => {
-                if (isCurrent && itemKey !== selectedKey[0]) {
-                    selectKey([itemKey]);
-                }
-            }}
-        >
-            {children}
-        </Link>
-    );
-
-    SelectableLink.propTypes = {
-        to: string.isRequired,
-        itemKey: string.isRequired,
-        children: any,
-    };
+const Navbar = ({ currentPath }) => {
+    const [, basePath] = currentPath.match(/^([^/]*)\/?.*$/);
 
     return (
         <Menu
             mode="horizontal"
-            selectedKeys={selectedKey}
+            selectedKeys={basePath}
         >
             <Menu.Item key="logo">
                 <img alt="logo" src={logo} height="30px" />
             </Menu.Item>
             <Menu.Item key="sales">
-                <SelectableLink
+                <Link
                     to="/sales"
                     itemKey="sales"
                 >
                     <Icon type="red-envelope" />
                     Sales
-                </SelectableLink>
+                </Link>
             </Menu.Item>
             <Menu.Item key="purchases">
-                <SelectableLink
+                <Link
                     to="/purchases"
                     itemKey="purchases"
                 >
                     <Icon type="container" />
                     Purchases
-                </SelectableLink>
+                </Link>
             </Menu.Item>
-            <Menu.Item key="Warehouses">
-                <SelectableLink
+            <Menu.Item key="warehouses">
+                <Link
                     to="/warehouses"
                     itemKey="warehouses"
                 >
                     <Icon type="appstore" />
                     Warehouses
-                </SelectableLink>
+                </Link>
             </Menu.Item>
             <Menu.Item key="picking">
-                <SelectableLink
+                <Link
                     to="/picking"
                     itemKey="picking"
                 >
                     <Icon type="solution" />
                     Picking waves
-                </SelectableLink>
+                </Link>
             </Menu.Item>
         </Menu>
     );
+};
+
+Navbar.propTypes = {
+    currentPath: string.isRequired,
 };
 
 
