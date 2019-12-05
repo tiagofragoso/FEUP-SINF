@@ -12,9 +12,14 @@ const IdWithLink = (warehouseKey) => <Link to={warehouseKey}>{warehouseKey}</Lin
 const table_columns = [
     {
         title: "ID",
+        dataIndex: "id",
+        key: "id",
+        render: IdWithLink,
+    },
+    {
+        title: "Key",
         dataIndex: "warehouseKey",
         key: "warehouseKey",
-        render: IdWithLink,
     },
     {
         title: "Name",

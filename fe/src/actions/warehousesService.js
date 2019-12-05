@@ -1,7 +1,11 @@
 import fetch from "../utils/fetchingWithToken";
 import config from "../config";
 import { setWarehouses, setWarehousesError, setWarehousesLoading } from "./warehousesActions";
-import { setCurrentWarehouse, setCurrentWarehouseError, setCurrentWarehouseLoading } from "./currentWarehouseActions";
+import {
+    setCurrentWarehouseInfo, setCurrentWarehouseInfoLoading,
+    setCurrentWarehouseItems, setCurrentWarehouseItemsLoading,
+    setCurrentWarehouseError,
+} from "./currentWarehouseActions";
 
 export const getWarehouses = () => async (dispatch, getState) => {
     dispatch(setWarehousesLoading(true));
@@ -28,27 +32,52 @@ export const getWarehouses = () => async (dispatch, getState) => {
 };
 
 export const getWarehouseDetails = (id) => async (dispatch, getState) => {
-    dispatch(setCurrentWarehouseLoading(true));
+    dispatch(setCurrentWarehouseInfoLoading(true));
+    dispatch(setCurrentWarehouseItemsLoading(true));
 
     const { login } = getState();
     try {
-        const res = await fetch(`/api/${config.tenant}/${config.organization}/sales/orders/${id}`, login.access_token);
+        const res = await fetch(`/api/${config.tenant}/${config.organization}/materialscore/warehouses/${id}`, login.access_token);
 
         if (res.status !== 200) {
-            console.error("getting sales order failed:", res.status);
+            console.error("getting warehouse info failed:", res.status);
             const data = await res.json();
             dispatch(setCurrentWarehouseError(data));
-            dispatch(setCurrentWarehouseLoading(false));
+            dispatch(setCurrentWarehouseInfoLoading(false));
+            dispatch(setCurrentWarehouseItemsLoading(false));
             return;
         }
 
         const data = await res.json();
-        dispatch(setCurrentWarehouse(data));
-        dispatch(setCurrentWarehouseLoading(false));
+        dispatch(setCurrentWarehouseInfo(data));
+        dispatch(setCurrentWarehouseInfoLoading(false));
     } catch (err) {
-        console.error("rip2", err);
-        dispatch(setCurrentWarehouseError("idk2"));
-        dispatch(setCurrentWarehouseLoading(false));
+        console.error("rip8", err);
+        dispatch(setCurrentWarehouseError("idk8"));
+        dispatch(setCurrentWarehouseInfoLoading(false));
+        dispatch(setCurrentWarehouseItemsLoading(false));
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/${config.tenant}/${config.organization}/materialscore/materialsitems`, login.access_token);
+
+        if (res.status !== 200) {
+            console.error("getting materials items failed:", res.status);
+            const data = await res.json();
+            dispatch(setCurrentWarehouseError(data));
+            dispatch(setCurrentWarehouseItemsLoading(false));
+            return;
+        }
+
+        const data = await res.json();
+        dispatch(setCurrentWarehouseItems(data));
+        dispatch(setCurrentWarehouseItemsLoading(false));
+    } catch (err) {
+        console.error("rip9", err);
+        dispatch(setCurrentWarehouseError("idk9"));
+        dispatch(setCurrentWarehouseItemsLoading(false));
+        return;
     }
 };
 
