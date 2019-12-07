@@ -70,9 +70,9 @@ const PurchaseOrderPage = ({ order_id }) => {
                 {items &&
                 <>
                     <br/>
-                    <Typography.Title level={4}>Not Shipped ({items.not_shipped.length})</Typography.Title>
+                    <Typography.Title level={4}>Not Received ({items.not_received.length})</Typography.Title>
                     <Table
-                        dataSource={items.not_shipped} columns={[
+                        dataSource={items.not_received} columns={[
                             {
                                 title: "",
                                 dataIndex: "image_stuff",
@@ -81,8 +81,8 @@ const PurchaseOrderPage = ({ order_id }) => {
                             },
                             {
                                 title: "Item",
-                                dataIndex: "salesItem",
-                                key: "salesItem",
+                                dataIndex: "purchasesItem",
+                                key: "purchasesItem",
                             },
                             {
                                 title: "Description",
@@ -99,13 +99,13 @@ const PurchaseOrderPage = ({ order_id }) => {
                                 dataIndex: "lineExtensionAmount.amount",
                                 key: "lineExtensionAmount.amount",
                             },
-                        ]} rowKey="salesItem"
+                        ]} rowKey="purchasesItem"
                     />
 
                     <br/>
-                    <Typography.Title level={4}>Shipped ({items.shipped.length})</Typography.Title>
+                    <Typography.Title level={4}>Received ({items.received.length})</Typography.Title>
                     <Table
-                        dataSource={items.shipped} columns={[
+                        dataSource={items.received} columns={[
                             {
                                 title: "",
                                 dataIndex: "image_stuff",
@@ -114,8 +114,8 @@ const PurchaseOrderPage = ({ order_id }) => {
                             },
                             {
                                 title: "Item",
-                                dataIndex: "salesItem",
-                                key: "salesItem",
+                                dataIndex: "purchasesItem",
+                                key: "purchasesItem",
                             },
                             {
                                 title: "Description",
@@ -132,7 +132,7 @@ const PurchaseOrderPage = ({ order_id }) => {
                                 dataIndex: "lineExtensionAmount.amount",
                                 key: "lineExtensionAmount.amount",
                             },
-                        ]} rowKey="salesItem"
+                        ]} rowKey="purchasesItem"
                     />
                 </>
                 }

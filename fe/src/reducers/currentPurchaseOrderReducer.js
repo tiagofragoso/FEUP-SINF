@@ -14,11 +14,11 @@ export default (state = initialState, action) => {
                 ...state,
                 order: action.payload,
                 items: {
-                    shipped: action.payload.documentLines
-                        .map((item) => ({ ...item, quantity: item.deliveredQuantity }))
+                    received: action.payload.documentLines
+                        .map((item) => ({ ...item, quantity: item.receivedQuantity }))
                         .filter((item) => item.quantity > 0),
-                    not_shipped: action.payload.documentLines
-                        .map((item) => ({ ...item, quantity: item.quantity - item.deliveredQuantity }))
+                    not_received: action.payload.documentLines
+                        .map((item) => ({ ...item, quantity: item.quantity - item.receivedQuantity }))
                         .filter((item) => item.quantity > 0),
                 },
             };
