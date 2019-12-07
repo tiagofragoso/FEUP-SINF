@@ -43,8 +43,8 @@ const PurchaseOrderPage = ({ order_id }) => {
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
-                    <Col>
-                        {order && <Typography.Text>{order.buyerCustomerParty}</Typography.Text>}
+                    <Col span={12}>
+                        {order && <Typography.Text>{order.sellerSupplierPartyName}</Typography.Text>}
                     </Col>
                     <Col>
                         {order && <Typography.Text>{order.buyerCustomerPartyName}</Typography.Text>}
@@ -52,18 +52,12 @@ const PurchaseOrderPage = ({ order_id }) => {
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        {order && <Typography.Text>{order.unloadingPoint}</Typography.Text>}
-                    </Col>
-                    <Col>
-                        {order && <Typography.Text>{order.unloadingPointAddress}</Typography.Text>}
+                        {order && <Typography.Text>{order.emailTo}</Typography.Text>}
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        {order && <Typography.Text>{order.emailTo}</Typography.Text>}
-                    </Col>
-                    <Col>
-                        {order && <Typography.Text>{order.unloadingPostalZone}</Typography.Text>}
+                        {order && <Typography.Text>{order.loadingPointAddress}</Typography.Text>}
                     </Col>
                 </Row>
 
@@ -96,8 +90,8 @@ const PurchaseOrderPage = ({ order_id }) => {
                             },
                             {
                                 title: "Total",
-                                dataIndex: "lineExtensionAmount.amount",
-                                key: "lineExtensionAmount.amount",
+                                dataIndex: "totalAmount",
+                                key: "totalAmount",
                             },
                         ]} rowKey="purchasesItem"
                     />
@@ -129,8 +123,8 @@ const PurchaseOrderPage = ({ order_id }) => {
                             },
                             {
                                 title: "Total",
-                                dataIndex: "lineExtensionAmount.amount",
-                                key: "lineExtensionAmount.amount",
+                                dataIndex: "totalAmount",
+                                key: "totalAmount",
                             },
                         ]} rowKey="purchasesItem"
                     />

@@ -15,10 +15,18 @@ export default (state = initialState, action) => {
                 order: action.payload,
                 items: {
                     received: action.payload.documentLines
-                        .map((item) => ({ ...item, quantity: item.receivedQuantity }))
+                        .map((item) => ({
+                            ...item,
+                            quantity: item.receivedQuantity,
+                            totalAmount: item.receivedQuantity * item.unitPrice.amount,
+                        }))
                         .filter((item) => item.quantity > 0),
                     not_received: action.payload.documentLines
-                        .map((item) => ({ ...item, quantity: item.quantity - item.receivedQuantity }))
+                        .map((item) => ({
+                            ...item,
+                            quantity: item.quantity - item.receivedQuantity,
+                            totalAmount: (item.quantity - item.receivedQuantity) * item.unitPrice.amount,
+                        }))
                         .filter((item) => item.quantity > 0),
                 },
             };
