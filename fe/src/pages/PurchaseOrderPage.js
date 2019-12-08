@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Row, Col, Table, Spin, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import PageLayout from "../components/PageLayout";
 import { getPurchaseOrder } from "../actions/purchasesService";
+import HeaderWithAction from "../components/HeaderWithAction";
 
 const PurchaseOrderPage = ({ order_id }) => {
     const dispatch = useDispatch();
@@ -14,6 +15,12 @@ const PurchaseOrderPage = ({ order_id }) => {
     const {
         access_token,
     } = useSelector((state) => state.login);
+
+    const [selectedItems, selectItem] = useState([]);
+
+    const generateGoodsReceipt = () => {
+        console.log(selectedItems);
+    };
 
     // useEffect with empty dependencies array functions simillarly to componentDidMount
     useEffect(() => {
@@ -64,7 +71,18 @@ const PurchaseOrderPage = ({ order_id }) => {
                 {items &&
                 <>
                     <br/>
-                    <Typography.Title level={4}>Not Received ({items.not_received.length})</Typography.Title>
+                    {
+                    // <Typography.Title level={4}>Not Received ({items.not_received.length})</Typography.Title>
+                    // <Button type="primary" onClick={generateGoodsReceipt}>Generate Goods Receipt</Button>
+                    }
+                    <HeaderWithAction
+                        title={`Not Received (${items.not_received.length})`}
+                        btnLabel="Generate Goods Receipt"
+                        btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
+                        btnDisabled={selectedItems.length === 0}
+                        onClick={generateGoodsReceipt}
+                    />
+                    <br/>
                     <Table
                         dataSource={items.not_received} columns={[
                             {
@@ -94,6 +112,7 @@ const PurchaseOrderPage = ({ order_id }) => {
                                 key: "totalAmount",
                             },
                         ]} rowKey="purchasesItem"
+                        rowSelection={{ selectedItems, onChange: selectItem }}
                     />
 
                     <br/>
