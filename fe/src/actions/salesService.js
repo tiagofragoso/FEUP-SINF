@@ -18,6 +18,7 @@ export const getSalesOrders = () => async (dispatch, getState) => {
         }
 
         const data = await res.json();
+        console.log(data);
         dispatch(setSalesOrders(data));
         dispatch(setSalesOrdersLoading(false));
     } catch (err) {

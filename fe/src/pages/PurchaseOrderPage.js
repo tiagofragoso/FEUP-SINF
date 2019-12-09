@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Typography, Row, Col, Table, Spin, Alert } from "antd";
+import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from "react";
+import { Typography, Row, Col, Table, Spin, Alert, Modal, Form, InputNumber } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -18,8 +18,44 @@ const PurchaseOrderPage = ({ order_id }) => {
 
     const [selectedItems, selectItem] = useState([]);
 
+    const [visibleModal, setVisibleModal] = useState(false);
+
+    const [selectedItemQuantities, setSelectedItemsQuantities] = useState([]);
+
+    const formRef = useRef(null);
+
+    // eslint-disable-next-line react/display-name
+    const formEl = forwardRef(({ form }, ref) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useImperativeHandle(ref, () => ({ form }));
+        return (
+            <Form>
+                {formItems(form.getFieldDecorator)}
+            </Form>
+        );
+    });
+
+    const WrappedForm = Form.create()(formEl);
+
+    const formItems = (getFieldDecorator) => selectedItemQuantities.map((iq) => (
+        <Form.Item key={iq.item} label={iq.item} labelCol={{ span: 12 }} labelAlign="left">
+            {getFieldDecorator(iq.item, {
+                initialValue: iq.quantity,
+            })(<InputNumber min={1} max={iq.quantity} />)}
+        </Form.Item>
+    ));
+
+    const handleSubmit = () => {
+        const { current: { form } } = formRef;
+        console.log(form.getFieldsValue());
+    };
+
     const generateGoodsReceipt = () => {
-        console.log(selectedItems);
+        setVisibleModal(true);
+        setSelectedItemsQuantities(selectedItems.map((key) => ({
+            item: key,
+            quantity: items.not_received.find((e) => e.purchasesItem === key).quantity,
+        })));
     };
 
     // useEffect with empty dependencies array functions simillarly to componentDidMount
@@ -71,10 +107,6 @@ const PurchaseOrderPage = ({ order_id }) => {
                 {items &&
                 <>
                     <br/>
-                    {
-                    // <Typography.Title level={4}>Not Received ({items.not_received.length})</Typography.Title>
-                    // <Button type="primary" onClick={generateGoodsReceipt}>Generate Goods Receipt</Button>
-                    }
                     <HeaderWithAction
                         title={`Not Received (${items.not_received.length})`}
                         btnLabel="Generate Goods Receipt"
@@ -147,6 +179,18 @@ const PurchaseOrderPage = ({ order_id }) => {
                             },
                         ]} rowKey="purchasesItem"
                     />
+                    <Modal
+                        centered
+                        title="Generate Goods Receipt"
+                        visible={visibleModal}
+                        onOk={handleSubmit}
+                        onCancel={() => setVisibleModal(false)}
+                        okText="Submit"
+                    >
+                        <WrappedForm
+                            wrappedComponentRef={formRef}
+                        />
+                    </Modal>
                 </>
                 }
 

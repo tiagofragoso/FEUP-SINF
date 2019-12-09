@@ -18,6 +18,7 @@ export const getPurchaseOrders = () => async (dispatch, getState) => {
         }
 
         const data = await res.json();
+        console.log(data);
         dispatch(setPurchasesOrders(data));
         dispatch(setPurchasesOrdersLoading(false));
     } catch (err) {
