@@ -8,7 +8,7 @@ import { getPurchaseOrders } from "../actions/purchasesService";
 import OrderStatusLabel from "../components/OrderStatusLabel";
 
 
-const IdWithLink = (id) => <Link to={id}>{id}</Link>;
+const IdWithLink = (key, record) => <Link to={record.id}>{key}</Link>;
 
 const table_columns = [
     {
@@ -18,8 +18,8 @@ const table_columns = [
     },
     {
         title: "Order ID",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "naturalKey",
+        key: "naturalKey",
         render: IdWithLink,
     },
     {

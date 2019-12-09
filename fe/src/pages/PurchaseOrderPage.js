@@ -85,12 +85,14 @@ const PurchaseOrderPage = ({ order_id }) => {
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        <Typography.Text
-                            copyable={order_id}
-                            strong
-                        >
-                            {order_id}
-                        </Typography.Text>
+                        { order && (
+                            <Typography.Title
+                                copyable={order.naturalKey}
+                                level={4}
+                                strong
+                            >
+                                {order.naturalKey}
+                            </Typography.Title>) }
                     </Col>
                     <Col>
                         {order && <Typography.Text>{order.documentDate}</Typography.Text>}
