@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import PageLayout from "../components/PageLayout";
 import { getPurchaseOrder } from "../actions/purchasesService";
+import { createGoodsReceipt } from "../actions/goodsReceiptService";
 import HeaderWithAction from "../components/HeaderWithAction";
 
 const PurchaseOrderPage = ({ order_id }) => {
@@ -12,6 +13,9 @@ const PurchaseOrderPage = ({ order_id }) => {
     const {
         order, items, loading, error,
     } = useSelector((state) => state.currentPurchaseOrder);
+    const {
+        loading: goodsReceiptLoading, error: goodsReceiptError,
+    } = useSelector((state) => state.goodsReceipt);
     const {
         access_token,
     } = useSelector((state) => state.login);
@@ -47,7 +51,8 @@ const PurchaseOrderPage = ({ order_id }) => {
 
     const handleSubmit = () => {
         const { current: { form } } = formRef;
-        console.log(form.getFieldsValue());
+        dispatch(createGoodsReceipt(order, form.getFieldsValue()));
+        setVisibleModal(false);
     };
 
     const generateGoodsReceipt = () => {
@@ -70,7 +75,13 @@ const PurchaseOrderPage = ({ order_id }) => {
 
     return (
         <PageLayout title="Purchase Order">
-            {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
+            {(error || goodsReceiptError) &&
+                <Alert
+                    message={(error && error.message) || (goodsReceiptError && goodsReceiptError.message) || "Error!"}
+                    type="error"
+                    showIcon
+                />
+            }
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
@@ -112,6 +123,7 @@ const PurchaseOrderPage = ({ order_id }) => {
                         btnLabel="Generate Goods Receipt"
                         btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
                         btnDisabled={selectedItems.length === 0}
+                        btnLoading={goodsReceiptLoading}
                         onClick={generateGoodsReceipt}
                     />
                     <br/>

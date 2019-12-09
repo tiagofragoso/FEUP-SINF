@@ -5,4 +5,5 @@ export default {
     apiUrl: process.env.REACT_APP_API_URL,
     tenant: process.env.REACT_APP_TENANT,
     organization: process.env.REACT_APP_ORGANIZATION,
+    company: process.env.REACT_APP_COMPANY,
 };
