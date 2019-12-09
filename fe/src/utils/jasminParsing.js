@@ -1,23 +1,30 @@
 export const OrderState = Object.freeze({
     PENDING: "PENDING",
     PARTIAL: "PARTIAL",
-    SENT: "SENT",
+    COMPLETE: "COMPLETE",
+});
+
+export const DocumentType = Object.freeze({
+    SALE: "SALE",
+    PURCHASE: "PURCHASE",
 });
 
 export const documentLinesToState = (documentLines) => {
-    let nothing_sent = true;
+    let nothing_complete = true;
     let has_partial = false;
 
     for (const item of documentLines) {
-        if (item.deliveredQuantity !== 0) {
-            nothing_sent = false;
+        const processedQuantity = item.deliveredQuantity || item.receivedQuantity || 0;
+
+        if (processedQuantity !== 0) {
+            nothing_complete = false;
         }
-        if (item.deliveredQuantity < item.quantity) {
+        if (processedQuantity < item.quantity) {
             has_partial = true;
         }
     }
 
-    if (nothing_sent) {
+    if (nothing_complete) {
         return OrderState.PENDING;
     }
 
@@ -25,5 +32,16 @@ export const documentLinesToState = (documentLines) => {
         return OrderState.PARTIAL;
     }
 
-    return OrderState.SENT;
+    return OrderState.COMPLETE;
+};
+
+export const parseDocumentType = (documentType) => {
+    switch (documentType) {
+        case "ECL":
+            return DocumentType.SALE;
+        case "ECF":
+            return DocumentType.PURCHASE;
+        default:
+            return DocumentType.SALE;
+    }
 };
