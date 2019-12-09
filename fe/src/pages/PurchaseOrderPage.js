@@ -150,11 +150,6 @@ const PurchaseOrderPage = ({ order_id }) => {
                                 dataIndex: "quantity",
                                 key: "quantity",
                             },
-                            {
-                                title: "Total",
-                                dataIndex: "totalAmount",
-                                key: "totalAmount",
-                            },
                         ]} rowKey="purchasesItem"
                         rowSelection={{ selectedItems, onChange: selectItem }}
                     />
@@ -183,11 +178,6 @@ const PurchaseOrderPage = ({ order_id }) => {
                                 title: "Quantity",
                                 dataIndex: "quantity",
                                 key: "quantity",
-                            },
-                            {
-                                title: "Total",
-                                dataIndex: "totalAmount",
-                                key: "totalAmount",
                             },
                         ]} rowKey="purchasesItem"
                     />

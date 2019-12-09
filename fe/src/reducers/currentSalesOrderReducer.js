@@ -18,14 +18,12 @@ export default (state = initialState, action) => {
                         .map((item) => ({
                             ...item,
                             quantity: item.deliveredQuantity,
-                            totalAmount: item.deliveredQuantity * item.unitPrice.amount,
                         }))
                         .filter((item) => item.quantity > 0),
                     not_shipped: action.payload.documentLines
                         .map((item) => ({
                             ...item,
                             quantity: item.quantity - item.deliveredQuantity,
-                            totalAmount: (item.quantity - item.deliveredQuantity) *  item.unitPrice.amount,
                         }))
                         .filter((item) => item.quantity > 0),
                 },

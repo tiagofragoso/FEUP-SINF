@@ -94,11 +94,6 @@ const SalesOrderPage = ({ order_id }) => {
                                 dataIndex: "quantity",
                                 key: "quantity",
                             },
-                            {
-                                title: "Total",
-                                dataIndex: "totalAmount",
-                                key: "totalAmount",
-                            },
                         ]} rowKey="salesItem"
                     />
 
@@ -126,11 +121,6 @@ const SalesOrderPage = ({ order_id }) => {
                                 title: "Quantity",
                                 dataIndex: "quantity",
                                 key: "quantity",
-                            },
-                            {
-                                title: "Total",
-                                dataIndex: "totalAmount",
-                                key: "totalAmount",
                             },
                         ]} rowKey="salesItem"
                     />

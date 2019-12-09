@@ -28,11 +28,6 @@ const table_columns = [
         key: "sellerSupplierPartyName",
     },
     {
-        title: "Total (€)",
-        dataIndex: "payableAmount.amount",
-        key: "payableAmount.amount",
-    },
-    {
         title: "Status",
         key: "status",
         render: OrderStatusLabel,
