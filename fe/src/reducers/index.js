@@ -9,6 +9,7 @@ import pickingWavesReducer from "./pickingWavesReducer";
 import currentWarehouseReducer from "./currentWarehouseReducer";
 import purchasesReducer from "./purchasesReducer";
 import goodsReceiptReducer from "./goodsReceiptReducer";
+import currentPickingWaveReducer from "./currentPickingWaveReducer";
 
 // Multiple reducers can exist for different parts of the app
 export default combineReducers({
@@ -22,4 +23,5 @@ export default combineReducers({
     warehouses: warehousesReducer,
     currentWarehouse: currentWarehouseReducer,
     pickingWaves: pickingWavesReducer,
+    currentPickingWave: currentPickingWaveReducer,
 });
