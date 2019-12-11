@@ -36,16 +36,20 @@ export const getPickingWave = (id) => async (dispatch) => {
     dispatch(setCurrentPickingWaveLoading(true));
 
     try {
-        const res = await fetch(`/picking-api/picking-wave/${id}/items`);
+        const items_res = await fetch(`/picking-api/picking-wave/${id}/items`);
+        const info_res = await fetch(`/picking-api/picking-wave/${id}/info`);
 
-        if (res.status !== 200) {
-            console.error("getting picking wave items failed:", res.status);
-            dispatch(setCurrentPickingWaveError("idk pickingWave items"));
+        if (items_res.status !== 200 || info_res.status !== 200) {
+            console.error("getting picking wave failed:", items_res.status);
+            dispatch(setCurrentPickingWaveError("idk pickingWave"));
             dispatch(setCurrentPickingWaveLoading(false));
             return;
         }
 
-        const data = await res.json();
+        const data = {
+            items: await items_res.json(),
+            info: await info_res.json(),
+        }
 
         dispatch(setCurrentPickingWave(data));
         dispatch(setCurrentPickingWaveLoading(false));

@@ -2,6 +2,7 @@ import { currentPickingWaveTypes } from "../actions/currentPickingWaveActions";
 
 const initialState = {
     items: null,
+    info: null,
     loading: false,
     error: false,
     pickItemStatus: null,
@@ -13,8 +14,9 @@ export default (state = initialState, action) => {
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE:
             return {
                 ...state,
-                picked_items: action.payload.filter((item) => item.is_picked),
-                not_picked_items: action.payload.filter((item) => !item.is_picked),
+                picked_items: action.payload.items.filter((item) => item.is_picked),
+                not_picked_items: action.payload.items.filter((item) => !item.is_picked),
+                info: action.payload.info,
             };
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE_LOADING:
             return {
@@ -56,8 +58,13 @@ export default (state = initialState, action) => {
                 }
             };
         case currentPickingWaveTypes.FINISH_PICKING_WAVE:
+            const { info } = state;
+
+            info.is_done = true;
+
             return {
                 ...state,
+                info,
                 finishPickingWaveStatus: {
                     status: "success",
                     message: `Successfully finished Picking Wave`,

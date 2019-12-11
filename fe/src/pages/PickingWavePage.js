@@ -14,7 +14,7 @@ const salesOrderWithLink = (sales_order_id) => (
 const PickingWavePage = ({ id }) => {
     const dispatch = useDispatch();
     const {
-        picked_items, not_picked_items, loading, error, pickItemStatus, finishPickingWaveStatus
+        picked_items, not_picked_items, loading, error, info, pickItemStatus, finishPickingWaveStatus
     } = useSelector((state) => state.currentPickingWave);
 
     useEffect(() => {
@@ -59,24 +59,29 @@ const PickingWavePage = ({ id }) => {
             Pick
         </Button>
     );
-
+    
     return (
-        <PageLayout title={`Picking Wave ${id}`}>
+        <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
             {finishPickingWaveStatus && 
                 <div>
                     <Alert message={(finishPickingWaveStatus && finishPickingWaveStatus.message)} type={finishPickingWaveStatus.status} />
                     <br/>
                 </div>
             }
-            <Button 
-                type="primary" 
-                loading={loading} 
-                disabled={not_picked_items ? not_picked_items.length > 0 : true}
-                onClick={() => dispatch(finishCurrentPickingWave(id))}
-            >
-                Finish Picking Wave
-            </Button>
-            <br/><br/>
+            
+            {info && !info.is_done &&
+                <div>
+                    <Button 
+                        type="primary" 
+                        loading={loading} 
+                        disabled={not_picked_items ? not_picked_items.length > 0 : true}
+                        onClick={() => dispatch(finishCurrentPickingWave(id))}
+                    >
+                        Finish Picking Wave
+                    </Button>
+                    <br/><br/>
+                </div>
+            }
 
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             {pickItemStatus && 
