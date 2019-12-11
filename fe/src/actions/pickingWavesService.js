@@ -1,5 +1,7 @@
 import { setPickingWaves, setPickingWavesError, setPickingWavesLoading } from "./pickingWavesActions";
-import { setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading } from "./currentPickingWaveActions";
+import { 
+    setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading, pickItem, pickItemError
+} from "./currentPickingWaveActions";
 
 export const getPickingWaves = () => async (dispatch) => {
     dispatch(setPickingWavesLoading(true));
@@ -52,3 +54,23 @@ export const getPickingWave = (id) => async (dispatch) => {
         dispatch(setCurrentPickingWaveLoading(false));
     }
 };
+
+export const pickItemFromPickingWave = (picking_wave_id, item_id) => async (dispatch) => {
+    try {
+        const res = await fetch(`/picking-api/picking-wave/${picking_wave_id}/item/${item_id}`, {
+            method: "PUT",
+        });
+
+        if (res.status !== 200) {
+            console.error("Failed to pick item:", res.status);
+            dispatch(pickItemError("Failed to pick item"));
+            return;
+        }
+
+        dispatch(pickItem(item_id));
+    } catch (err) {
+        console.error("rip", err);
+        dispatch(pickItemError("Failed to pick item"));
+    }
+
+}
