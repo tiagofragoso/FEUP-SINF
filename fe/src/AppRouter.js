@@ -10,6 +10,7 @@ import PurchaseOrderPage from "./pages/PurchaseOrderPage";
 import { login } from "./actions/loginService";
 import WarehousesPage from "./pages/WarehousesPage";
 import PickingWavesPage from "./pages/PickingWavesPage";
+import PickingWavePage from "./pages/PickingWavePage";
 
 const AppRouter = () => {
     const dispatch = useDispatch();
@@ -28,8 +29,8 @@ const AppRouter = () => {
                 <PurchaseOrdersPage path="purchases" />
                 <PurchaseOrderPage path="purchases/:order_id" />
                 <WarehousesPage path="warehouses" />
-                <PickingWavesPage path="picking" />
-                <PickingWavesPage path="picking/:picking_wave_id" />
+                <PickingWavesPage path="picking-waves" />
+                <PickingWavePage path="picking-waves/:id" />
             </Layout>
             {/* btw missing 404 page */}
         </Router>

@@ -2,17 +2,21 @@
 import React, { useEffect } from "react";
 import { Table, Spin, Alert, Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "@reach/router";
 
 import { getPickingWaves } from "../actions/pickingWavesService";
 import PageLayout from "../components/PageLayout";
 
 const { TabPane } = Tabs;
 
+const IdWithLink = (id) => <Link to={id.toString()}>{id}</Link>
+
 const table_columns = [
     {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        render: IdWithLink,
     },
     {
         title: "Due Date",
