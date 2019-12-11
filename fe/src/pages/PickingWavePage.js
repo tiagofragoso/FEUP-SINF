@@ -4,7 +4,7 @@ import { Table, Spin, Alert, Typography, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
-import { getPickingWave, pickItemFromPickingWave } from "../actions/pickingWavesService";
+import { getPickingWave, pickItemFromPickingWave, finishCurrentPickingWave } from "../actions/pickingWavesService";
 import PageLayout from "../components/PageLayout";
 
 const salesOrderWithLink = (sales_order_id) => (
@@ -14,7 +14,7 @@ const salesOrderWithLink = (sales_order_id) => (
 const PickingWavePage = ({ id }) => {
     const dispatch = useDispatch();
     const {
-        picked_items, not_picked_items, loading, error, pickItemStatus,
+        picked_items, not_picked_items, loading, error, pickItemStatus, finishPickingWaveStatus
     } = useSelector((state) => state.currentPickingWave);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const PickingWavePage = ({ id }) => {
             title: "",
             dataIndex: "is_picked",
             key: "is_picked",
-            render: () => pickItemElement(id),
+            render: () => pickItemButton(id),
         },
     ];
     
@@ -54,7 +54,7 @@ const PickingWavePage = ({ id }) => {
         dispatch(pickItemFromPickingWave(picking_wave_id, item_id));
     }
     
-    const pickItemElement = (picking_wave_id) => (
+    const pickItemButton = (picking_wave_id) => (
         <Button onClick={(event) => pickItem(event, picking_wave_id)}>
             Pick
         </Button>
@@ -62,6 +62,22 @@ const PickingWavePage = ({ id }) => {
 
     return (
         <PageLayout title={`Picking Wave ${id}`}>
+            {finishPickingWaveStatus && 
+                <div>
+                    <Alert message={(finishPickingWaveStatus && finishPickingWaveStatus.message)} type={finishPickingWaveStatus.status} />
+                    <br/>
+                </div>
+            }
+            <Button 
+                type="primary" 
+                loading={loading} 
+                disabled={not_picked_items ? not_picked_items.length > 0 : true}
+                onClick={() => dispatch(finishCurrentPickingWave(id))}
+            >
+                Finish Picking Wave
+            </Button>
+            <br/><br/>
+
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             {pickItemStatus && 
                 <div>
@@ -70,12 +86,12 @@ const PickingWavePage = ({ id }) => {
                 </div>
             }
             <Typography.Title level={4}>{"Items to Pick"}</Typography.Title>
-            <Spin spinning={loading} size="large" tip="Loading Picking Wave...">
+            <Spin spinning={loading} size="large" tip="Loading Items to Pick...">
                 <Table dataSource={not_picked_items} columns={not_picked_items_table_columns} rowKey="item_key" />
             </Spin>
-            <br/>
+            
             <Typography.Title level={4}>{"Picked Items"}</Typography.Title>
-            <Spin spinning={loading} size="large" tip="Loading Picking Wave...">
+            <Spin spinning={loading} size="large" tip="Loading picked Items...">
                 <Table dataSource={picked_items} columns={picked_items_table_columns} rowKey="item_key" />
             </Spin>
         </PageLayout>
