@@ -19,7 +19,6 @@ const Navbar = ({ currentPath }) => {
             <Menu.Item key="sales">
                 <Link
                     to="/sales"
-                    itemKey="sales"
                 >
                     <Icon type="red-envelope" />
                     Sales
@@ -28,7 +27,6 @@ const Navbar = ({ currentPath }) => {
             <Menu.Item key="purchases">
                 <Link
                     to="/purchases"
-                    itemKey="purchases"
                 >
                     <Icon type="container" />
                     Purchases
@@ -37,7 +35,6 @@ const Navbar = ({ currentPath }) => {
             <Menu.Item key="warehouses">
                 <Link
                     to="/warehouses"
-                    itemKey="warehouses"
                 >
                     <Icon type="appstore" />
                     Warehouses
@@ -46,7 +43,6 @@ const Navbar = ({ currentPath }) => {
             <Menu.Item key="picking">
                 <Link
                     to="/picking"
-                    itemKey="picking"
                 >
                     <Icon type="solution" />
                     Picking waves
