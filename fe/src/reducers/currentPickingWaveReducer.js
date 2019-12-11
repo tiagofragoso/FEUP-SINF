@@ -5,6 +5,7 @@ const initialState = {
     loading: false,
     error: false,
     pickItemStatus: null,
+    finishPickingWaveStatus: null,
 };
 
 export default (state = initialState, action) => {
@@ -43,7 +44,7 @@ export default (state = initialState, action) => {
                 not_picked_items,
                 pickItemStatus: {
                     status: "success",
-                    message: `Successfully picked item ${item_key}`,
+                    message: `Successfully picked Item ${item_key}`,
                 }
             };
         case currentPickingWaveTypes.PICK_ITEM_ERROR:
@@ -54,6 +55,22 @@ export default (state = initialState, action) => {
                     message: action.payload,
                 }
             };
+        case currentPickingWaveTypes.FINISH_PICKING_WAVE:
+            return {
+                ...state,
+                finishPickingWaveStatus: {
+                    status: "success",
+                    message: `Successfully finished Picking Wave`,
+                }
+            };
+        case currentPickingWaveTypes.FINISH_PICKING_WAVE_ERROR:
+                return {
+                    ...state,
+                    finishPickingWaveStatus: {
+                        status: "error",
+                        message: action.payload,
+                    }
+                };
         default:
             return state;
     }
