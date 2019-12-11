@@ -19,4 +19,12 @@ module.exports = (app) => {
             pathRewrite: { "^/login": "" },
         })
     );
+
+    app.use(
+        "/picking-api",
+        proxy({
+            target: process.env.PICKING_WAVES_API_URL,
+            pathRewrite: { "^/picking-api": "" },
+        })
+    );
 };
