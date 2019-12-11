@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
 import PageLayout from "../components/PageLayout";
-import { getSalesOrders } from "../actions/salesService";
+import { getPurchaseOrders } from "../actions/purchasesService";
 import OrderStatusLabel from "../components/OrderStatusLabel";
 
 
@@ -23,14 +23,9 @@ const table_columns = [
         render: IdWithLink,
     },
     {
-        title: "Entity",
-        dataIndex: "buyerCustomerParty",
-        key: "buyerCustomerParty",
-    },
-    {
-        title: "Client name",
-        dataIndex: "buyerCustomerPartyName",
-        key: "buyerCustomerPartyName",
+        title: "Supplier",
+        dataIndex: "sellerSupplierPartyName",
+        key: "sellerSupplierPartyName",
     },
     {
         title: "Status",
@@ -39,11 +34,11 @@ const table_columns = [
     },
 ];
 
-const SalesOrdersPage = () => {
+const PurchaseOrdersPage = () => {
     const dispatch = useDispatch();
     const {
-        sales_orders, loading, error,
-    } = useSelector((state) => state.sales);
+        purchase_orders, loading, error,
+    } = useSelector((state) => state.purchases);
     const {
         access_token,
     } = useSelector((state) => state.login);
@@ -55,20 +50,20 @@ const SalesOrdersPage = () => {
             return;
         }
 
-        if (!sales_orders && !loading && !error) {
-            dispatch(getSalesOrders());
+        if (!purchase_orders && !loading && !error) {
+            dispatch(getPurchaseOrders());
         }
-    }, [access_token, dispatch, error, loading, sales_orders]);
+    }, [access_token, dispatch, error, loading, purchase_orders]);
 
 
     return (
-        <PageLayout title="Sales Orders">
+        <PageLayout title="Purchase Orders">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
-            <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Orders...">
-                <Table dataSource={sales_orders} columns={table_columns} rowKey="id" />
+            <Spin spinning={!access_token || loading} size="large" tip="Loading Purchase Orders...">
+                <Table dataSource={purchase_orders} columns={table_columns} rowKey="id" />
             </Spin>
         </PageLayout>
     );
 };
 
-export default SalesOrdersPage;
+export default PurchaseOrdersPage;

@@ -1,4 +1,4 @@
-import { currentSalesOrderTypes } from "../actions/currentSalesOrderActions";
+import { currentPurchaseOrderTypes } from "../actions/currentPurchaseOrderActions";
 
 const initialState = {
     order: null,
@@ -9,32 +9,32 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER:
+        case currentPurchaseOrderTypes.SET_CURRENT_PURCHASE_ORDER:
             return {
                 ...state,
                 order: action.payload,
                 items: {
-                    shipped: action.payload.documentLines
+                    received: action.payload.documentLines
                         .map((item) => ({
                             ...item,
-                            quantity: item.deliveredQuantity,
+                            quantity: item.receivedQuantity,
                         }))
                         .filter((item) => item.quantity > 0),
-                    not_shipped: action.payload.documentLines
+                    not_received: action.payload.documentLines
                         .map((item) => ({
                             ...item,
-                            quantity: item.quantity - item.deliveredQuantity,
+                            quantity: item.quantity - item.receivedQuantity,
                         }))
                         .filter((item) => item.quantity > 0),
                 },
             };
-        case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER_LOADING:
+        case currentPurchaseOrderTypes.SET_CURRENT_PURCHASE_ORDER_LOADING:
             return {
                 // Spreading initialState instead of state to reset previous success or error data
                 ...(action.payload ? initialState : state),
                 loading: action.payload,
             };
-        case currentSalesOrderTypes.SET_CURRENT_SALES_ORDER_ERROR:
+        case currentPurchaseOrderTypes.SET_CURRENT_PURCHASE_ORDER_ERROR:
             return {
                 ...state,
                 error: action.payload || true,

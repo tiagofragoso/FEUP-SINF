@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import Layout from "./components/Layout";
 import SalesOrdersPage from "./pages/SalesOrdersPage";
 import SalesOrderPage from "./pages/SalesOrderPage";
+import PurchaseOrdersPage from "./pages/PurchaseOrdersPage";
+import PurchaseOrderPage from "./pages/PurchaseOrderPage";
 import { login } from "./actions/loginService";
 import WarehousesPage from "./pages/WarehousesPage";
 
@@ -22,6 +24,8 @@ const AppRouter = () => {
                 {/* Set Sales page as index for now */}
                 <SalesOrdersPage path="sales" />
                 <SalesOrderPage path="sales/:order_id" />
+                <PurchaseOrdersPage path="purchases" />
+                <PurchaseOrderPage path="purchases/:order_id" />
                 <WarehousesPage path="warehouses" />
             </Layout>
             {/* btw missing 404 page */}
