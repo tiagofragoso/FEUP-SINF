@@ -16,9 +16,9 @@ insert into items(item_key, picking_wave, sales_order, name, quantity) values("J
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("K23A0", 2, "18I", "Banjo", 3, "true");
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("L24B7", 2, "19J", "12-String Guitar", 13, "true");
 
-insert into items(item_key, picking_wave, sales_order, name, quantity) values("O16P5", 3, "20K", "Clarinet", 7);
-insert into items(item_key, picking_wave, sales_order, name, quantity) values("P27K6", 3, "21L", "Harmonica", 2);
-insert into items(item_key, picking_wave, sales_order, name, quantity) values("Q38L7", 3, "22M", "Trombone", 1);
+insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("O16P5", 3, "20K", "Clarinet", 7, "true");
+insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("P27K6", 3, "21L", "Harmonica", 2, "true");
+insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("Q38L7", 3, "22M", "Trombone", 1, "true");
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("V49A8", 3, "23N", "Saxophone", 3, "true");
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("N50B9", 3, "24O", "Trumpet", 13, "true");
 

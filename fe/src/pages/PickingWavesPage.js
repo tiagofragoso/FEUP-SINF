@@ -46,10 +46,16 @@ const PickingWavesPage = () => {
             <Spin spinning={loading} size="large" tip="Loading Picking Waves...">
                 <Tabs defaultActiveKey="1" animated={false} size="large">
                     <TabPane tab="Active" key="1">
-                        <Table dataSource={pickingWaves && pickingWaves.active} columns={table_columns} rowKey="id" />
+                        {pickingWaves && pickingWaves.active && pickingWaves.active.length > 0 ?
+                            <Table dataSource={pickingWaves && pickingWaves.active} columns={table_columns} rowKey="id" /> :
+                            <p>There are no Active picking waves at the moment.</p>
+                        }
                     </TabPane>
                     <TabPane tab="Finished" key="2">
-                        <Table dataSource={pickingWaves && pickingWaves.finished} columns={table_columns} rowKey="id" />
+                        {pickingWaves && pickingWaves.finished && pickingWaves.finished.length > 0 ?
+                            <Table dataSource={pickingWaves && pickingWaves.finished} columns={table_columns} rowKey="id" /> :
+                            <p>There are no Finished picking waves at the moment.</p>
+                        }
                     </TabPane>
                 </Tabs>
             </Spin>

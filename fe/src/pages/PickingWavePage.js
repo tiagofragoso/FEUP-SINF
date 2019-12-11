@@ -63,14 +63,14 @@ const PickingWavePage = ({ id }) => {
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
             {finishPickingWaveStatus && 
-                <div>
+                <>
                     <Alert message={(finishPickingWaveStatus && finishPickingWaveStatus.message)} type={finishPickingWaveStatus.status} />
                     <br/>
-                </div>
+                </>
             }
             
             {info && !info.is_done &&
-                <div>
+                <>
                     <Button 
                         type="primary" 
                         loading={loading} 
@@ -80,25 +80,33 @@ const PickingWavePage = ({ id }) => {
                         Finish Picking Wave
                     </Button>
                     <br/><br/>
-                </div>
+                </>
             }
 
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             {pickItemStatus && 
-                <div>
+                <>
                     <Alert message={(pickItemStatus && pickItemStatus.message)} type={pickItemStatus.status} />
                     <br/>
-                </div>
+                </>
             }
-            <Typography.Title level={4}>{"Items to Pick"}</Typography.Title>
-            <Spin spinning={loading} size="large" tip="Loading Items to Pick...">
-                <Table dataSource={not_picked_items} columns={not_picked_items_table_columns} rowKey="item_key" />
-            </Spin>
+            {not_picked_items && not_picked_items.length > 0 &&
+                <>
+                    <Typography.Title level={4}>{"Items to Pick"}</Typography.Title>
+                    <Spin spinning={loading} size="large" tip="Loading Items to Pick...">
+                        <Table dataSource={not_picked_items} columns={not_picked_items_table_columns} rowKey="item_key" />
+                    </Spin>
+                </>
+            }
             
-            <Typography.Title level={4}>{"Picked Items"}</Typography.Title>
-            <Spin spinning={loading} size="large" tip="Loading picked Items...">
-                <Table dataSource={picked_items} columns={picked_items_table_columns} rowKey="item_key" />
-            </Spin>
+            {picked_items && picked_items.length > 0 &&
+                <>
+                    <Typography.Title level={4}>{"Picked Items"}</Typography.Title>
+                    <Spin spinning={loading} size="large" tip="Loading picked Items...">
+                        <Table dataSource={picked_items} columns={picked_items_table_columns} rowKey="item_key" />
+                    </Spin>
+                </>
+            }
         </PageLayout>
     );
 };

@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
             };
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE_LOADING:
             return {
-                ...state,
+                ...(action.payload ? initialState : state),
                 loading: action.payload,
             };
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE_ERROR:
