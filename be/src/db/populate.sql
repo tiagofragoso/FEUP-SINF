@@ -5,6 +5,7 @@ insert into picking_waves(name, due_date, is_done) values("done_picking_wave", "
 insert into items(item_key, picking_wave, sales_order, name) values("F2H77", 1, "46B", "Drums");
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("C6B00", 2, "11C", "Pan Flute", 7);
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("D00A1", 1, "11C", "Guitar", 2);
+insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("E11C3", 1, "11D", "Piano", 5, "true");
 
 insert into warehouse_zones(id, x, y) values("A00", 2, 0);
 insert into warehouse_zones(id, x, y) values("A01", -1, 0);

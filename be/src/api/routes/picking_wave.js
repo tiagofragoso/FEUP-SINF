@@ -108,4 +108,17 @@ module.exports = (app) => {
 
         return res.status(201).send();
     });
+
+    /**
+     * Picks an Item from the Picking wave
+     */
+    router.put("/:id/item/:item_key", picking_wave_validators.exists, item_validators.exists, (req, res) => {
+        const { i } = req.locals;
+
+        i.update({
+            is_picked: true,
+        });
+
+        return res.status(200).send();
+    });
 };
