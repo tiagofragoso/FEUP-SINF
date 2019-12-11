@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import PageLayout from "../components/PageLayout";
 import { getWarehouseDetails } from "../actions/warehousesService";
 
-const WarehousePage = ({ warehouse_id }) => {
+const WarehousePage = ({ warehouse_key }) => {
     const dispatch = useDispatch();
     const {
         warehouse, warehouse_loading,
@@ -24,8 +24,8 @@ const WarehousePage = ({ warehouse_id }) => {
             return;
         }
 
-        dispatch(getWarehouseDetails(warehouse_id));
-    }, [access_token, dispatch, warehouse_id]);
+        dispatch(getWarehouseDetails(warehouse_key));
+    }, [access_token, dispatch, warehouse_key]);
 
     const order = null;
 
@@ -35,12 +35,13 @@ const WarehousePage = ({ warehouse_id }) => {
             <Spin spinning={!access_token || warehouse_loading} size="large" tip="Loading Warehouse Details...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
+                        {warehouse &&
                         <Typography.Text
-                            copyable={warehouse_id}
+                            copyable={warehouse.id}
                             strong
                         >
-                            {warehouse_id}
-                        </Typography.Text>
+                            {warehouse.id}
+                        </Typography.Text>}
                     </Col>
                     <Col>
                         {order && <Typography.Text>{order.documentDate}</Typography.Text>}
@@ -48,7 +49,7 @@ const WarehousePage = ({ warehouse_id }) => {
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        {warehouse && <Typography.Text>{warehouse.warehouseKey}</Typography.Text>}
+                        <Typography.Text>{warehouse_key}</Typography.Text>
                     </Col>
                     <Col>
                         {""}
@@ -93,7 +94,7 @@ const WarehousePage = ({ warehouse_id }) => {
 };
 
 WarehousePage.propTypes = {
-    warehouse_id: PropTypes.string.isRequired,
+    warehouse_key: PropTypes.string.isRequired,
 };
 
 export default WarehousePage;

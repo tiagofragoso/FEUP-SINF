@@ -31,13 +31,13 @@ export const getWarehouses = () => async (dispatch, getState) => {
     }
 };
 
-export const getWarehouseDetails = (id) => async (dispatch, getState) => {
+export const getWarehouseDetails = (key) => async (dispatch, getState) => {
     dispatch(setCurrentWarehouseInfoLoading(true));
     dispatch(setCurrentWarehouseItemsLoading(true));
 
     const { login } = getState();
     try {
-        const res = await fetch(`/api/${config.tenant}/${config.organization}/materialscore/warehouses/${id}`, login.access_token);
+        const res = await fetch(`/api/${config.tenant}/${config.organization}/materialscore/warehouses/${key}`, login.access_token);
 
         if (res.status !== 200) {
             console.error("getting warehouse info failed:", res.status);

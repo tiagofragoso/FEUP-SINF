@@ -7,19 +7,14 @@ import { Link } from "@reach/router";
 import { getWarehouses } from "../actions/warehousesService";
 import PageLayout from "../components/PageLayout";
 
-const IdWithLink = (warehouseKey) => <Link to={warehouseKey}>{warehouseKey}</Link>;
+const KeyWithLink = (warehouseKey) => <Link to={warehouseKey}>{warehouseKey}</Link>;
 
 const table_columns = [
-    {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        render: IdWithLink,
-    },
     {
         title: "Key",
         dataIndex: "warehouseKey",
         key: "warehouseKey",
+        render: KeyWithLink,
     },
     {
         title: "Name",

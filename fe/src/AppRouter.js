@@ -32,7 +32,7 @@ const AppRouter = () => {
                 <WarehousesPage path="warehouse-zones" />
                 <PickingWavesPage path="picking-waves" />
                 <PickingWavePage path="picking-waves/:id" />
-                <WarehousePage path="warehouses/:warehouse_id" />
+                <WarehousePage path="warehouse-zones/:warehouse_key" />
             </Layout>
             {/* btw missing 404 page */}
         </Router>
