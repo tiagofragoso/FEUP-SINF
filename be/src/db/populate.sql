@@ -1,5 +1,6 @@
 insert into picking_waves(name, due_date) values("a_picking_wave", "10-09-2019");
 insert into picking_waves(name, due_date) values("another_picking_wave", "12-10-2018");
+insert into picking_waves(name, due_date, is_done) values("done_picking_wave", "15-11-2018", "true");
 
 insert into items(item_key, picking_wave, sales_order, name) values("F2H77", 1, "46B", "Drums");
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("C6B00", 2, "11C", "Pan Flute", 7);
