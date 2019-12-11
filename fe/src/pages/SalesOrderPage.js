@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { Typography, Row, Col, Table, Spin, Alert } from "antd";
+import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from "react";
+import { Typography, Row, Col, Table, Spin, Alert, Modal, Form, InputNumber, Select, Button, Divider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
+import HeaderWithAction from "../components/HeaderWithAction";
 import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
 
@@ -14,6 +15,80 @@ const SalesOrderPage = ({ order_id }) => {
     const {
         access_token,
     } = useSelector((state) => state.login);
+
+
+    const [selectedItems, selectItem] = useState([]);
+
+    const [visibleModal, setVisibleModal] = useState(false);
+
+    const [selectedItemQuantities, setSelectedItemsQuantities] = useState([]);
+
+    const formRef = useRef(null);
+
+    // eslint-disable-next-line react/display-name
+    const formEl = forwardRef(({ form }, ref) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useImperativeHandle(ref, () => ({ form }));
+        return (
+            <Form>
+                <Form.Item key="pickingWave">
+                    <Row type="flex" justify="space-between">
+                        <Col span={10}>
+                            {form.getFieldDecorator("pickingWave", {})(
+                                <Select placeholder="Select picking wave">
+                                    <Select.Option value="1">Picking wave 1</Select.Option>
+                                    <Select.Option value="2">Picking wave 2</Select.Option>
+                                    <Select.Option value="3">Picking wave 3</Select.Option>
+                                </Select>)}
+                        </Col>
+                        <Col span={2} className="text-align-center">
+                            <Typography.Text type="secondary" ><i>or</i></Typography.Text>
+                        </Col>
+                        <Col span={10} className="text-align-right">
+                            <Button type="primary">Create new picking wave</Button>
+                        </Col>
+                    </Row>
+
+                </Form.Item>
+                <Divider />
+                { formItems(form.getFieldDecorator) }
+            </Form>
+        );
+    });
+
+    const WrappedForm = Form.create()(formEl);
+
+    const formItems = (getFieldDecorator) => selectedItemQuantities.map((iq) => (
+        <Form.Item key={iq.item} label={iq.item} labelCol={{ span: 12 }} labelAlign="left">
+            {getFieldDecorator(iq.item, {
+                initialValue: iq.quantity,
+            })(<InputNumber min={1} max={iq.quantity} />)}
+        </Form.Item>
+    ));
+
+    const handleSubmit = () => {
+        const { current: { form } } = formRef;
+        // dispatch(createGoodsReceipt(order, form.getFieldsValue()));
+        setVisibleModal(false);
+    };
+
+    const addToPickingWave = () => {
+        setVisibleModal(true);
+        setSelectedItemsQuantities(selectedItems.map((key) => ({
+            item: key,
+            quantity: items.not_shipped.find((e) => e.salesItem === key).quantity,
+        })));
+    };
+
+    // const hasSelectedPickingWave = () => {
+    //     if (formRef.current) {
+    //         const { current: { form } } = formRef;
+    //         console.log(form.getFieldValue("pickingWave"));
+    //         return !!form.getFieldValue("pickingWave");
+    //     } else {
+    //         return false;
+    //     }
+    // };
 
     // useEffect with empty dependencies array functions simillarly to componentDidMount
     useEffect(() => {
@@ -72,7 +147,15 @@ const SalesOrderPage = ({ order_id }) => {
                 {items &&
                 <>
                     <br/>
-                    <Typography.Title level={4}>Not Shipped ({items.not_shipped.length})</Typography.Title>
+                    <HeaderWithAction
+                        title={`Not Received (${items.not_shipped.length})`}
+                        btnLabel="Add to picking wave"
+                        btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
+                        btnDisabled={selectedItems.length === 0}
+                        btnLoading={false}
+                        onClick={addToPickingWave}
+                    />
+                    <br />
                     <Table
                         dataSource={items.not_shipped} columns={[
                             {
@@ -97,6 +180,7 @@ const SalesOrderPage = ({ order_id }) => {
                                 key: "quantity",
                             },
                         ]} rowKey="salesItem"
+                        rowSelection={{ selectedItems, onChange: selectItem }}
                     />
 
                     <br/>
@@ -126,6 +210,18 @@ const SalesOrderPage = ({ order_id }) => {
                             },
                         ]} rowKey="salesItem"
                     />
+                    <Modal
+                        centered
+                        title="Add to picking wave"
+                        visible={visibleModal}
+                        onOk={handleSubmit}
+                        onCancel={() => setVisibleModal(false)}
+                        okText="Submit"
+                    >
+                        <WrappedForm
+                            wrappedComponentRef={formRef}
+                        />
+                    </Modal>
                 </>
                 }
 
