@@ -52,6 +52,15 @@ module.exports = (app) => {
     });
 
     /**
+     * Gets Picking Wave Info
+     */
+    router.get("/:id/info", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
+        const { pwave } = req.locals;
+
+        return res.json(pwave.dataValues);
+    });
+
+    /**
      * Marks a Picking Wave as done
      */
     router.put("/:id/finish", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
