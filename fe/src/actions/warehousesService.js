@@ -132,3 +132,24 @@ export const getItemWarehouse = async (items, access_token) => {
 
     return result;
 };
+
+/**
+ * Creates a Stock Transfer Order
+ * @param {String} sourceWarehouse ID of the source warehouse
+ * @param {String} targetWarehouse ID of the target warehouse
+ * @param {Array} items items to transfer. Should be in form {id, quantity}
+ */
+export const createStockTransferOrder = (sourceWarehouse, targetWarehouse, items, access_token) =>
+    fetch(`/api/${config.tenant}/${config.organization}/materialsmanagement/stockTransferOrders`,
+        access_token,
+        {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({
+                company: config.company,
+                sourceWarehouse,
+                targetWarehouse,
+                UnloadingCountry: "PT",
+                documentLines: items.map(({ id, quantity }) => ({ materialsItem: id, quantity })),
+            }),
+        });

@@ -34,14 +34,35 @@ export default (state = initialState, action) => {
                         }
                     }, []),
             };
+        case currentWarehouseTypes.REMOVE_ITEMS_FROM_CURRENT_WAREHOUSE:
+            return {
+                ...state,
+                items: state.items.map((item) => {
+                    const movedItemEntry = action.payload.find((movedItem) => item.itemKey === movedItem.id);
+                    if (!movedItemEntry) {
+                        return item;
+                    }
+
+                    return {
+                        ...item,
+                        quantity: item.quantity - movedItemEntry.quantity,
+                    };
+                }),
+            };
         case currentWarehouseTypes.SET_CURRENT_WAREHOUSE_INFO_LOADING:
             return {
                 ...state,
+                // Spreading initialState instead of state to reset previous success or error data
+                error: (action.payload ? initialState.error : state.error),
+                warehouse: (action.payload ? initialState.warehouse : state.warehouse),
                 warehouse_loading: action.payload,
             };
         case currentWarehouseTypes.SET_CURRENT_WAREHOUSE_ITEMS_LOADING:
             return {
                 ...state,
+                // Spreading initialState instead of state to reset previous success or error data
+                error: (action.payload ? initialState.error : state.error),
+                items: (action.payload ? initialState.items : state.items),
                 items_loading: action.payload,
             };
         case currentWarehouseTypes.SET_CURRENT_WAREHOUSE_ERROR:
