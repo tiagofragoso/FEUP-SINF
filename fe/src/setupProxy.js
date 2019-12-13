@@ -21,10 +21,10 @@ module.exports = (app) => {
     );
 
     app.use(
-        "/picking-api",
+        "/sinfony-api",
         proxy({
-            target: process.env.PICKING_WAVES_API_URL,
-            pathRewrite: { "^/picking-api": "" },
+            target: process.env.SINFONY_API_URL,
+            pathRewrite: { "^/sinfony-api": "" },
         })
     );
 };

@@ -8,8 +8,8 @@ export const getPickingWaves = () => async (dispatch) => {
     dispatch(setPickingWavesLoading(true));
 
     try {
-        const active_waves_res = await fetch(`/picking-api/picking-wave`);
-        const finished_waves_res = await fetch(`/picking-api/picking-wave/finished`);
+        const active_waves_res = await fetch(`/sinfony-api/picking-wave`);
+        const finished_waves_res = await fetch(`/sinfony-api/picking-wave/finished`);
 
         if (active_waves_res.status !== 200 || finished_waves_res.status !== 200) {
             console.error("getting picking waves failed:", active_waves_res.status);
@@ -36,8 +36,8 @@ export const getPickingWave = (id) => async (dispatch) => {
     dispatch(setCurrentPickingWaveLoading(true));
 
     try {
-        const items_res = await fetch(`/picking-api/picking-wave/${id}/items`);
-        const info_res = await fetch(`/picking-api/picking-wave/${id}/info`);
+        const items_res = await fetch(`/sinfony-api/picking-wave/${id}/items`);
+        const info_res = await fetch(`/sinfony-api/picking-wave/${id}/info`);
 
         if (items_res.status !== 200 || info_res.status !== 200) {
             console.error("getting picking wave failed:", items_res.status);
@@ -62,7 +62,7 @@ export const getPickingWave = (id) => async (dispatch) => {
 
 export const pickItemFromPickingWave = (picking_wave_id, item_id) => async (dispatch) => {
     try {
-        const res = await fetch(`/picking-api/picking-wave/${picking_wave_id}/item/${item_id}`, {
+        const res = await fetch(`/sinfony-api/picking-wave/${picking_wave_id}/item/${item_id}`, {
             method: "PUT",
         });
 
@@ -81,7 +81,7 @@ export const pickItemFromPickingWave = (picking_wave_id, item_id) => async (disp
 
 export const finishCurrentPickingWave = (picking_wave_id) => async (dispatch) => {
     try {
-        const res = await fetch(`/picking-api/picking-wave/${picking_wave_id}/finish`, {
+        const res = await fetch(`/sinfony-api/picking-wave/${picking_wave_id}/finish`, {
             method: "PUT",
         });
 

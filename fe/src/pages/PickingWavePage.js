@@ -20,6 +20,12 @@ const PickingWavePage = ({ id }) => {
     useEffect(() => {
         dispatch(getPickingWave(id));
     }, [dispatch, id]);
+    
+    const pickItemButton = (_, item) => (
+        <Button onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
+            Pick
+        </Button>
+    );
 
     const not_picked_items_table_columns = [
         {
@@ -42,23 +48,11 @@ const PickingWavePage = ({ id }) => {
             title: "",
             dataIndex: "is_picked",
             key: "is_picked",
-            render: () => pickItemButton(id),
+            render: pickItemButton,
         },
     ];
     
-    const picked_items_table_columns = not_picked_items_table_columns.slice(0, 3); 
-
-    const pickItem = ({ target }, picking_wave_id) => {
-        const item_id = target.parentElement.parentElement.children[0].textContent;
-    
-        dispatch(pickItemFromPickingWave(picking_wave_id, item_id));
-    }
-    
-    const pickItemButton = (picking_wave_id) => (
-        <Button onClick={(event) => pickItem(event, picking_wave_id)}>
-            Pick
-        </Button>
-    );
+    const picked_items_table_columns = not_picked_items_table_columns.slice(0, 3);
     
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
