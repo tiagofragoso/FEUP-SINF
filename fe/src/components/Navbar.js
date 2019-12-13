@@ -40,9 +40,9 @@ const Navbar = ({ currentPath }) => {
                     Warehouses
                 </Link>
             </Menu.Item>
-            <Menu.Item key="picking">
+            <Menu.Item key="picking-waves">
                 <Link
-                    to="/picking"
+                    to="/picking-waves"
                 >
                     <Icon type="solution" />
                     Picking waves

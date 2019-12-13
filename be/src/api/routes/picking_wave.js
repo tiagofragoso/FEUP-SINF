@@ -52,6 +52,15 @@ module.exports = (app) => {
     });
 
     /**
+     * Gets Picking Wave Info
+     */
+    router.get("/:id/info", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
+        const { pwave } = req.locals;
+
+        return res.json(pwave.dataValues);
+    });
+
+    /**
      * Marks a Picking Wave as done
      */
     router.put("/:id/finish", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
@@ -107,5 +116,18 @@ module.exports = (app) => {
         );
 
         return res.status(201).send();
+    });
+
+    /**
+     * Picks an Item from the Picking wave
+     */
+    router.put("/:id/item/:item_key", picking_wave_validators.exists, item_validators.exists, (req, res) => {
+        const { i } = req.locals;
+
+        i.update({
+            is_picked: true,
+        });
+
+        return res.status(200).send();
     });
 };

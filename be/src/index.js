@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const express_loader = require("./loaders/express_loader");
 
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT = 4000;
 
 const port = process.env.PORT || DEFAULT_PORT;
 

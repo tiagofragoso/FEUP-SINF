@@ -29,6 +29,11 @@ const item = db.define("items", {
         defaultValue: 0,
         validate: { min: 0 },
     },
+    is_picked: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: "false",
+    },
 });
 
 module.exports = item;

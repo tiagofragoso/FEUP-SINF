@@ -15,7 +15,8 @@ CREATE TABLE items (
     picking_wave REFERENCES picking_waves (id) NOT NULL,
     sales_order TEXT NOT NULL,
     name TEXT NOT NULL,
-    quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0
+    quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,
+    is_picked BOOLEAN NOT NULL DEFAULT false
 );
 
 DROP TABLE IF EXISTS warehouse_zones;

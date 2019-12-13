@@ -54,7 +54,10 @@ const exists = async (req, res, next) => {
         return res.status(404).send();
     }
 
-    req.locals = { pwave };
+    if (!req.locals) {
+        req.locals = {};
+    }
+    req.locals.pwave = pwave;
 
     return next();
 };

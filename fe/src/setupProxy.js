@@ -19,4 +19,12 @@ module.exports = (app) => {
             pathRewrite: { "^/login": "" },
         })
     );
+
+    app.use(
+        "/sinfony-api",
+        proxy({
+            target: process.env.SINFONY_API_URL,
+            pathRewrite: { "^/sinfony-api": "" },
+        })
+    );
 };
