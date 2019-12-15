@@ -7,6 +7,21 @@ const picking_wave_validators = require("../middlewares/validators/picking_wave"
 const item_validators = require("../middlewares/validators/item");
 const { Op } = require("sequelize");
 
+const getPWaveProgress = async (pwave_id) => {
+    const items = flattenQueryResults(await item.findAll({
+        where: {
+            picking_wave: pwave_id,
+        },
+    }));
+
+    if (items.length === 0) {
+        return "";
+    } else {
+        const num_picked_items = items.filter((item) => item.is_picked).length;
+        return `${num_picked_items}/${items.length}`;
+    }
+};
+
 module.exports = (app) => {
     app.use("/picking-wave", router);
 
@@ -14,26 +29,34 @@ module.exports = (app) => {
      * Gets all the in progress Picking Waves
      */
     router.get("/", async (_, res) => {
-        const picking_waves = await picking_wave.findAll({
+        const picking_waves = flattenQueryResults(await picking_wave.findAll({
             where: {
                 [Op.or]: [{ is_done: "false" }, { is_done: 0 }],
             },
-        });
+        }));
 
-        return res.json(flattenQueryResults(picking_waves));
+        for (const pwave of picking_waves) {
+            pwave.progress = await getPWaveProgress(pwave.id);
+        }
+
+        return res.json(picking_waves);
     });
 
     /**
      * Gets all the finished Picking Waves
      */
     router.get("/finished", async (_, res) => {
-        const picking_waves = await picking_wave.findAll({
+        const picking_waves = flattenQueryResults(await picking_wave.findAll({
             where: {
                 [Op.or]: [{ is_done: "true" }, { is_done: 1 }],
             },
-        });
+        }));
 
-        return res.json(flattenQueryResults(picking_waves));
+        for (const pwave of picking_waves) {
+            pwave.progress = await getPWaveProgress(pwave.id);
+        }
+
+        return res.json(picking_waves);
     });
 
     /**
@@ -54,10 +77,14 @@ module.exports = (app) => {
     /**
      * Gets Picking Wave Info
      */
-    router.get("/:id/info", picking_wave_validators.get, picking_wave_validators.exists, (req, res) => {
+    router.get("/:id/info", picking_wave_validators.get, picking_wave_validators.exists, async (req, res) => {
         const { pwave } = req.locals;
+        const { id } = req.params;
 
-        return res.json(pwave.dataValues);
+        const pwave_info = pwave.dataValues;
+        pwave_info.progress = await getPWaveProgress(id);
+
+        return res.json(pwave_info);
     });
 
     /**

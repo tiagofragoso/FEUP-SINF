@@ -1,6 +1,7 @@
-insert into picking_waves(name, due_date) values("Ben's Wave", "10-09-2019");
-insert into picking_waves(name, due_date) values("John's Wave", "12-10-2018");
-insert into picking_waves(name, due_date, is_done) values("Richard's Wave", "15-11-2018", "true");
+insert into picking_waves(name, due_date) values("OPorto Music Shop", "22-12-2019");
+insert into picking_waves(name, due_date) values("Musicarte", "23-12-2019");
+insert into picking_waves(name, due_date, is_done) values("Lisbon Music", "23-12-2019", "true");
+insert into picking_waves(name, due_date) values("Leiria Sounds", "28-12-2019");
 
 insert into items(item_key, picking_wave, sales_order, name) values("F2H77", 1, "46B", "Drums");
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("D00A1", 1, "11C", "Guitar", 2);

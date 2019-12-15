@@ -10,6 +10,8 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+    const { info } = state;
+
     switch (action.type) {
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE:
             return {
@@ -40,8 +42,11 @@ export default (state = initialState, action) => {
                 }
             }
 
+            info.progress = `${picked_items.length}/${picked_items.length + not_picked_items.length}`;
+
             return {
                 ...state,
+                info,
                 picked_items,
                 not_picked_items,
                 pickItemStatus: {
@@ -58,8 +63,6 @@ export default (state = initialState, action) => {
                 }
             };
         case currentPickingWaveTypes.FINISH_PICKING_WAVE:
-            const { info } = state;
-
             info.is_done = true;
 
             return {

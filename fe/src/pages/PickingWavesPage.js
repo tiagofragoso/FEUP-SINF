@@ -11,6 +11,8 @@ const { TabPane } = Tabs;
 
 const IdWithLink = (id) => <Link to={id.toString()}>{id}</Link>
 
+const pwaveProgress = (progress) => progress ? `${progress}` : "-";
+
 const table_columns = [
     {
         title: "ID",
@@ -27,6 +29,12 @@ const table_columns = [
         title: "Name",
         dataIndex: "name",
         key: "name",
+    },
+    {
+        title: "Progress",
+        dataIndex: "progress",
+        key: "progress",
+        render: pwaveProgress,
     },
 ];
 
