@@ -106,7 +106,7 @@ module.exports = (app) => {
     router.post("/", picking_wave_validators.create, async (req, res) => {
         const { name, due_date } = req.body;
 
-        await picking_wave.create(
+        const pwave = await picking_wave.create(
             {
                 name,
                 due_date,
@@ -116,7 +116,7 @@ module.exports = (app) => {
             },
         );
 
-        return res.status(201).send();
+        return res.status(201).json(pwave);
     });
 
     /**

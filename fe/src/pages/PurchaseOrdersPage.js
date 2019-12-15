@@ -6,6 +6,7 @@ import { Link } from "@reach/router";
 import PageLayout from "../components/PageLayout";
 import { getPurchaseOrders } from "../actions/purchasesService";
 import OrderStatusLabel from "../components/OrderStatusLabel";
+import formatDate from "../utils/formatDate";
 
 
 const IdWithLink = (key, record) => <Link to={record.id}>{key}</Link>;
@@ -15,6 +16,7 @@ const table_columns = [
         title: "Date",
         dataIndex: "documentDate",
         key: "documentDate",
+        render: formatDate,
     },
     {
         title: "Order ID",

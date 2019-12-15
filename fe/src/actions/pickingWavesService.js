@@ -1,4 +1,7 @@
-import { setPickingWaves, setPickingWavesError, setPickingWavesLoading } from "./pickingWavesActions";
+import { 
+    setPickingWaves, setPickingWavesError, setPickingWavesLoading, 
+    addNewPickingWave, setCreatePickingWaveError, setCreatePickingWaveLoading,
+} from "./pickingWavesActions";
 import {
     setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading,
     pickItem, pickItemError, finishPickingWave, finishPickingWaveError,
@@ -112,5 +115,32 @@ export const getPath = async (warehouse_zones) => {
         console.error("rip", err);
         return null;
     }
+};
 
+export const createPickingWave = ({ name, date }) => async (dispatch) => {
+    dispatch(setCreatePickingWaveLoading(true));
+    try {
+        const res = await fetch("/sinfony-api/picking-wave/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, due_date: date.format() }),
+        });
+
+        if (res.status !== 201) {
+            console.error("Failed to create picking wave:", res.status);
+            dispatch(setCreatePickingWaveError(true));
+            dispatch(setCreatePickingWaveLoading(false));
+        }
+
+        const data = await res.json();
+        dispatch(addNewPickingWave(data));
+        dispatch(setCreatePickingWaveLoading(false));
+
+        return data;
+    } catch (err) {
+        console.error("rip", err);
+        dispatch(setCreatePickingWaveError(true));
+        dispatch(setCreatePickingWaveLoading(false));
+    }
+    return null;
 };

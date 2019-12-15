@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS picking_waves;
 CREATE TABLE picking_waves (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    due_date DATE NOT NULL,
+    due_date DATETIME NOT NULL,
     is_done BOOLEAN NOT NULL DEFAULT false
 );
 

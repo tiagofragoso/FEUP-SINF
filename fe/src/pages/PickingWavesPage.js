@@ -6,6 +6,7 @@ import { Link } from "@reach/router";
 
 import { getPickingWaves } from "../actions/pickingWavesService";
 import PageLayout from "../components/PageLayout";
+import { formatDate } from "../utils/formatDate";
 
 const { TabPane } = Tabs;
 
@@ -24,6 +25,7 @@ const table_columns = [
         title: "Due Date",
         dataIndex: "due_date",
         key: "due_date",
+        render: formatDate,
     },
     {
         title: "Progress",

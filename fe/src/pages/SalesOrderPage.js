@@ -1,11 +1,13 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from "react";
-import { Typography, Row, Col, Table, Spin, Alert, Modal, Form, InputNumber, Select, Button, Divider } from "antd";
+import { Typography, Row, Col, Table, Spin, Alert, Modal, Form, InputNumber, Select, Button, Divider, Input, DatePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import HeaderWithAction from "../components/HeaderWithAction";
 import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
+import { createPickingWave, getPickingWaves } from "../actions/pickingWavesService";
+import formatDate from "../utils/formatDate";
 
 const SalesOrderPage = ({ order_id }) => {
     const dispatch = useDispatch();
@@ -15,13 +17,17 @@ const SalesOrderPage = ({ order_id }) => {
     const {
         access_token,
     } = useSelector((state) => state.login);
-
+    const {
+        pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError,
+    } = useSelector((state) => state.pickingWaves);
 
     const [selectedItems, selectItem] = useState([]);
 
     const [visibleModal, setVisibleModal] = useState(false);
 
     const [selectedItemQuantities, setSelectedItemsQuantities] = useState([]);
+
+    const [isCreatingPickingWave, setIsCreatingPickingWave] = useState(false);
 
     const formRef = useRef(null);
 
@@ -31,25 +37,54 @@ const SalesOrderPage = ({ order_id }) => {
         useImperativeHandle(ref, () => ({ form }));
         return (
             <Form>
-                <Form.Item key="pickingWave">
+                <Form.Item>
                     <Row type="flex" justify="space-between">
                         <Col span={10}>
-                            {form.getFieldDecorator("pickingWave", {})(
-                                <Select placeholder="Select picking wave">
-                                    <Select.Option value="1">Picking wave 1</Select.Option>
-                                    <Select.Option value="2">Picking wave 2</Select.Option>
-                                    <Select.Option value="3">Picking wave 3</Select.Option>
-                                </Select>)}
+                            {form.getFieldDecorator("id", {})(
+                                <Select
+                                    notFoundContent={pickingWavesLoading || pickingWavesError ? <Spin size="small" /> : null}
+                                    placeholder="Select picking wave"
+                                >
+                                    { pickingWaves &&
+                                        pickingWaves.active.map((p) => <Select.Option key={p.id}>{p.name}</Select.Option>) }
+                                </Select>
+                            )}
                         </Col>
                         <Col span={2} className="text-align-center">
                             <Typography.Text type="secondary" ><i>or</i></Typography.Text>
                         </Col>
-                        <Col span={10} className="text-align-right">
+                        <Col span={10} className="text-align-right" onClick={() => setIsCreatingPickingWave(true)}>
                             <Button type="primary">Create new picking wave</Button>
                         </Col>
                     </Row>
-
                 </Form.Item>
+                { isCreatingPickingWave &&
+                    <Row type="flex" justify="space-between" align="middle">
+                        <Col span={9}>
+                            <Form.Item>
+                                {form.getFieldDecorator("name", {})(
+                                    <Input placeholder="Picking wave name"/>
+                                )}
+                            </Form.Item>
+                        </Col>
+                        <Col span={9} className="text-align-center">
+                            <Form.Item>
+                                {form.getFieldDecorator("date", {})(
+                                    <DatePicker placeholder="Date" showTime showToday={false} format="YYYY-MM-DD HH:mm:ss" />
+                                )}
+                            </Form.Item>
+                        </Col>
+                        <Col span={5} className="text-align-right">
+                            <Form.Item>
+                                <Button
+                                    type="primary" loading={createLoading}
+                                    onClick={handleSubmitPickingWave}
+                                >Submit
+                                </Button>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                }
                 <Divider />
                 { formItems(form.getFieldDecorator) }
             </Form>
@@ -68,16 +103,36 @@ const SalesOrderPage = ({ order_id }) => {
 
     const handleSubmit = () => {
         const { current: { form } } = formRef;
+        console.log(form.getFieldsValue());
         // dispatch(createGoodsReceipt(order, form.getFieldsValue()));
         setVisibleModal(false);
     };
 
     const addToPickingWave = () => {
+        dispatch(getPickingWaves());
+        setIsCreatingPickingWave(false);
         setVisibleModal(true);
         setSelectedItemsQuantities(selectedItems.map((key) => ({
             item: key,
             quantity: items.not_shipped.find((e) => e.salesItem === key).quantity,
         })));
+    };
+
+    const handleSubmitPickingWave = async () => {
+        const { current: { form } } = formRef;
+        const { name, date } = form.getFieldsValue();
+        if (name || date) {
+            const data = await dispatch(createPickingWave({ name, date }));
+            if (data && !createError) {
+                setIsCreatingPickingWave(false);
+                setSelectedPickingWave(data.id);
+            }
+        }
+    };
+
+    const setSelectedPickingWave = (id) => {
+        const { current: { form } } = formRef;
+        form.setFieldsValue({ id });
     };
 
     // const hasSelectedPickingWave = () => {
@@ -116,7 +171,7 @@ const SalesOrderPage = ({ order_id }) => {
                             </Typography.Title>) }
                     </Col>
                     <Col>
-                        {order && <Typography.Text>{order.documentDate}</Typography.Text>}
+                        {order && <Typography.Text>{formatDate(order.documentDate)}</Typography.Text>}
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">

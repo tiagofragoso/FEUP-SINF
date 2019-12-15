@@ -7,6 +7,7 @@ import PageLayout from "../components/PageLayout";
 import { getPurchaseOrder } from "../actions/purchasesService";
 import { createGoodsReceipt } from "../actions/goodsReceiptService";
 import HeaderWithAction from "../components/HeaderWithAction";
+import formatDate from "../utils/formatDate";
 
 const PurchaseOrderPage = ({ order_id }) => {
     const dispatch = useDispatch();
@@ -95,7 +96,7 @@ const PurchaseOrderPage = ({ order_id }) => {
                             </Typography.Title>) }
                     </Col>
                     <Col>
-                        {order && <Typography.Text>{order.documentDate}</Typography.Text>}
+                        {order && <Typography.Text>{formatDate(order.documentDate)}</Typography.Text>}
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">

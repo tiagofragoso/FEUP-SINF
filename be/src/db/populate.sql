@@ -2,7 +2,7 @@
 -- Picking Waves --
 -------------------
 
-insert into picking_waves(name, due_date) values("OPorto Music Shop", "22-12-2019");
+insert into picking_waves(name, due_date) values("OPorto Music Shop", "22-12-2019T12:00");
 
 -----------
 -- Items --
