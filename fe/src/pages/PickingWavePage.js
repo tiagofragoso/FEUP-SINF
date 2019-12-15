@@ -70,9 +70,15 @@ const PickingWavePage = ({ id }) => {
                         loading={loading} 
                         disabled={not_picked_items ? not_picked_items.length > 0 : true}
                         onClick={() => dispatch(finishCurrentPickingWave(id))}
+                        
                     >
                         Finish Picking Wave
                     </Button>
+                    {info.completion_percentage && 
+                        <span style={{marginLeft: "1em", fontSize: "1.2em"}}>
+                            {`${info.completion_percentage}% Completed`}
+                        </span>
+                    }
                     <br/><br/>
                 </>
             }
