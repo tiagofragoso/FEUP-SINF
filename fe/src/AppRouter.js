@@ -28,7 +28,7 @@ const AppRouter = () => {
                 <SalesOrderPage path="sales/:order_id" />
                 <PurchaseOrdersPage path="purchases" />
                 <PurchaseOrderPage path="purchases/:order_id" />
-                <WarehousesPage path="warehouses" />
+                <WarehousesPage path="warehouse-zones" />
                 <PickingWavesPage path="picking-waves" />
                 <PickingWavePage path="picking-waves/:id" />
             </Layout>
