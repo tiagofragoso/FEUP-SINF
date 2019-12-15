@@ -46,7 +46,7 @@ const WarehousesPage = () => {
 
 
     return (
-        <PageLayout title="Warehouses">
+        <PageLayout title="Warehouse Zones">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Warehouses...">
                 <Table dataSource={warehouses} columns={table_columns} rowKey="id" />

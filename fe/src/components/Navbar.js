@@ -32,12 +32,12 @@ const Navbar = ({ currentPath }) => {
                     Purchases
                 </Link>
             </Menu.Item>
-            <Menu.Item key="warehouses">
+            <Menu.Item key="warehouse-zones">
                 <Link
-                    to="/warehouses"
+                    to="/warehouse-zones"
                 >
                     <Icon type="appstore" />
-                    Warehouses
+                    Warehouse Zones
                 </Link>
             </Menu.Item>
             <Menu.Item key="picking-waves">
