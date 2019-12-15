@@ -27,7 +27,11 @@ export default (state = initialState, action) => {
                         if (curr_item_warehouse.length === 0) {
                             return acc;
                         } else if (curr_item_warehouse.length === 1) {
-                            return [...acc, { ...curr_item, quantity: curr_item_warehouse[0].stockBalance }];
+                            if (curr_item_warehouse[0].stockBalance === 0) {
+                                return acc;
+                            } else {
+                                return [...acc, { ...curr_item, quantity: curr_item_warehouse[0].stockBalance }];
+                            }
                         } else {
                             console.error("wtf primavera, ids arent unique???");
                             return acc;
