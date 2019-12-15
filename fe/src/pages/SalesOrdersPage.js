@@ -55,10 +55,8 @@ const SalesOrdersPage = () => {
             return;
         }
 
-        if (!sales_orders && !loading && !error) {
-            dispatch(getSalesOrders());
-        }
-    }, [access_token, dispatch, error, loading, sales_orders]);
+        dispatch(getSalesOrders());
+    }, [access_token, dispatch]);
 
 
     return (

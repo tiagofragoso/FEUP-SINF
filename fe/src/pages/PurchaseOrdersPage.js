@@ -50,10 +50,8 @@ const PurchaseOrdersPage = () => {
             return;
         }
 
-        if (!purchase_orders && !loading && !error) {
-            dispatch(getPurchaseOrders());
-        }
-    }, [access_token, dispatch, error, loading, purchase_orders]);
+        dispatch(getPurchaseOrders());
+    }, [access_token, dispatch]);
 
 
     return (
