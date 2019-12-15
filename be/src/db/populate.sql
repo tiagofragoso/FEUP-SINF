@@ -1,7 +1,15 @@
+-------------------
+-- Picking Waves --
+-------------------
+
 insert into picking_waves(name, due_date) values("OPorto Music Shop", "22-12-2019");
 insert into picking_waves(name, due_date) values("Musicarte", "23-12-2019");
 insert into picking_waves(name, due_date, is_done) values("Lisbon Music", "23-12-2019", "true");
 insert into picking_waves(name, due_date) values("Leiria Sounds", "28-12-2019");
+
+-----------
+-- Items --
+-----------
 
 insert into items(item_key, picking_wave, sales_order, name) values("F2H77", 1, "46B", "Drums");
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("D00A1", 1, "11C", "Guitar", 2);
@@ -23,9 +31,15 @@ insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("V49A8", 3, "23N", "Saxophone", 3, "true");
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("N50B9", 3, "24O", "Trumpet", 13, "true");
 
+---------------------
+-- Warehouse Zones --
+---------------------
 
-insert into warehouse_zones(id, x, y) values("A00", 2, 0);
-insert into warehouse_zones(id, x, y) values("A01", -1, 0);
-insert into warehouse_zones(id, x, y) values("A02", 3, 3);
-insert into warehouse_zones(id, x, y) values("A03", 4, 5);
-insert into warehouse_zones(id, x, y) values("A04", 7, 6);
+insert into warehouse_zones(id, x, y) values("01", 0, 1);
+insert into warehouse_zones(id, x, y) values("PERC", 2, 0);
+insert into warehouse_zones(id, x, y) values("STRINGS", 4, 0);
+insert into warehouse_zones(id, x, y) values("BRASS", 6, 0);
+insert into warehouse_zones(id, x, y) values("WOODWINDS", 2, 2);
+insert into warehouse_zones(id, x, y) values("KEYBOARDS", 4, 2);
+insert into warehouse_zones(id, x, y) values("OTHER", 6, 2);
+insert into warehouse_zones(id, x, y) values("EXIT", 8, 1);
