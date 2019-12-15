@@ -74,9 +74,9 @@ const PickingWavePage = ({ id }) => {
                     >
                         Finish Picking Wave
                     </Button>
-                    {info.completion_percentage && 
+                    {info.progress && 
                         <span style={{marginLeft: "1em", fontSize: "1.2em"}}>
-                            {`${info.completion_percentage}% Completed`}
+                            {`Progress ${info.progress}`}
                         </span>
                     }
                     <br/><br/>

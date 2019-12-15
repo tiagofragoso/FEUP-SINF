@@ -11,7 +11,7 @@ const { TabPane } = Tabs;
 
 const IdWithLink = (id) => <Link to={id.toString()}>{id}</Link>
 
-const completionPercentage = (percentage) => percentage ? `${percentage}%` : "-";
+const pwaveProgress = (progress) => progress ? `${progress}` : "-";
 
 const table_columns = [
     {
@@ -31,10 +31,10 @@ const table_columns = [
         key: "name",
     },
     {
-        title: "Completion Percentage",
-        dataIndex: "completion_percentage",
-        key: "completion_percentage",
-        render: completionPercentage,
+        title: "Progress",
+        dataIndex: "progress",
+        key: "progress",
+        render: pwaveProgress,
     },
 ];
 

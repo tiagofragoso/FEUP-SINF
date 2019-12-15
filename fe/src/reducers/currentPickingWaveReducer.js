@@ -42,7 +42,7 @@ export default (state = initialState, action) => {
                 }
             }
 
-            info.completion_percentage = ((picked_items.length / (picked_items.length + not_picked_items.length)) * 100).toFixed(2);
+            info.progress = `${picked_items.length}/${picked_items.length + not_picked_items.length}`;
 
             return {
                 ...state,

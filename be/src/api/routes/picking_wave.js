@@ -7,7 +7,7 @@ const picking_wave_validators = require("../middlewares/validators/picking_wave"
 const item_validators = require("../middlewares/validators/item");
 const { Op } = require("sequelize");
 
-const getPWaveCompletionPercentage = async (pwave_id) => {
+const getPWaveProgress = async (pwave_id) => {
     const items = flattenQueryResults(await item.findAll({
         where: {
             picking_wave: pwave_id,
@@ -18,7 +18,7 @@ const getPWaveCompletionPercentage = async (pwave_id) => {
         return "";
     } else {
         const num_picked_items = items.filter((item) => item.is_picked).length;
-        return ((num_picked_items / items.length) * 100).toFixed(2);
+        return `${num_picked_items}/${items.length}`;
     }
 };
 
@@ -36,7 +36,7 @@ module.exports = (app) => {
         }));
 
         for (const pwave of picking_waves) {
-            pwave.completion_percentage = await getPWaveCompletionPercentage(pwave.id);
+            pwave.progress = await getPWaveProgress(pwave.id);
         }
 
         return res.json(picking_waves);
@@ -53,7 +53,7 @@ module.exports = (app) => {
         }));
 
         for (const pwave of picking_waves) {
-            pwave.completion_percentage = await getPWaveCompletionPercentage(pwave.id);
+            pwave.progress = await getPWaveProgress(pwave.id);
         }
 
         return res.json(picking_waves);
@@ -82,7 +82,7 @@ module.exports = (app) => {
         const { id } = req.params;
 
         const pwave_info = pwave.dataValues;
-        pwave_info.completion_percentage = await getPWaveCompletionPercentage(id);
+        pwave_info.progress = await getPWaveProgress(id);
 
         return res.json(pwave_info);
     });
