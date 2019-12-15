@@ -51,3 +51,55 @@ export const getWarehouseDetails = (id) => async (dispatch, getState) => {
         dispatch(setCurrentWarehouseLoading(false));
     }
 };
+
+/**
+ * Gets the warehouse that each given item belongs to
+ *
+ * @param {Array} items Array of Objects with shape {itemKey: CLARINET, desiredQuantity: 5}
+ * @param {String} access_token
+ */
+export const getItemWarehouse = async (items, access_token) => {
+    const res = await fetch(`/api/${config.tenant}/${config.organization}/materialscore/materialsitems`, access_token);
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+        console.error("getting materials items failed:", res.status, data);
+        throw new Error("Getting materials items failed");
+    }
+
+    const result = items.map(({ itemKey, desiredQuantity }) => {
+        const materialItem = data.find((item) => item.itemKey === itemKey);
+        if (!materialItem) {
+            return null;
+        }
+
+        const warehouses = materialItem.materialsItemWarehouses
+            .filter((warehouse) =>
+                warehouse.warehouse !== "01"
+                && warehouse.warehouse !== "EXIT"
+                && warehouse.stockBalance >= desiredQuantity
+            );
+
+        console.log("filtered warehouses", warehouses);
+
+        let itemWarehouse = null;
+
+        if (warehouses.length === 1) {
+            itemWarehouse = warehouses[0];
+        } else if (warehouses.length === 0) {
+            itemWarehouse = null;
+        } else {
+            console.warn("things might not be working as expected");
+            itemWarehouse = warehouses[0];
+        }
+
+        return {
+            itemKey,
+            desiredQuantity,
+            itemWarehouse,
+        };
+    });
+
+    return result;
+};
