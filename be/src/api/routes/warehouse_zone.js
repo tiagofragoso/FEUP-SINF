@@ -49,10 +49,10 @@ module.exports = (app) => {
     /**
      * Gets Warehouse Zones visit path
      */
-    router.get("/path/calculate", warehouse_zone_validators.path, warehouse_zone_validators.allExist, (req, res) => {
-        const { warehouse_zones } = req.locals;
+    router.get("/path/calculate/:zones", warehouse_zone_validators.path, warehouse_zone_validators.allExist, (req, res) => {
+        const { zones } = req.locals;
 
-        const path = getPickingWavePath([...warehouse_zones]);
+        const path = getPickingWavePath([...zones]);
 
         return res.json({
             path,

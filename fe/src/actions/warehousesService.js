@@ -110,8 +110,6 @@ export const getItemWarehouse = async (items, access_token) => {
                 && warehouse.stockBalance >= desiredQuantity
             );
 
-        console.log("filtered warehouses", warehouses);
-
         let itemWarehouse = null;
 
         if (warehouses.length === 1) {

@@ -97,3 +97,20 @@ export const finishCurrentPickingWave = (picking_wave_id) => async (dispatch) =>
         dispatch(finishPickingWaveError("Failed to finish picking wave"));
     }
 };
+
+export const getPath = async (warehouse_zones) => {
+    try {
+        const res = await fetch(`/sinfony-api/warehouse-zone/path/calculate/${encodeURI(["01", ...warehouse_zones, "EXIT"])}`);
+
+        if (res.status !== 200) {
+            console.error("Failed to get path:", res.status);
+            return null;
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.error("rip", err);
+        return null;
+    }
+
+};

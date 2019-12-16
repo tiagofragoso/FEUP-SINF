@@ -1,8 +1,8 @@
 const getPickingWavePath = (warehouse_zones) => {
     const path = [];
 
-    // Path starts with the warehouse zone closest to origin [0, 0] (which represents the warehouse entry point)
-    const closest_to_origin_index = getClosestWarehouseZoneIndex({ x: 0, y: 0 }, warehouse_zones);
+    // Path starts with the warehouse zone closest to origin [0, 1] (which represents the operator location)
+    const closest_to_origin_index = getClosestWarehouseZoneIndex({ x: 0, y: 1 }, warehouse_zones);
     path.push(warehouse_zones.splice(closest_to_origin_index, 1)[0]);
 
     while (warehouse_zones.length > 0) {

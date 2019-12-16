@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getWarehousePlant } from "../actions/warehousesService";
+import { array } from "prop-types";
 
 const WAREHOUSE_PADDING = 50;
 const WAREHOUSE_WIDTH = 800;
@@ -22,9 +23,13 @@ export default class WarehousePlant extends Component {
 
     drawWarehouseZone = (x, y, id) => {
         const is_special_zone = SPECIAL_ZONES.includes(id);
+        const is_highlighted = !this.props.path || this.props.path.find((zone) => zone.id === id);
+
         const height = is_special_zone ? (WAREHOUSE_PADDED_HEIGHT - (2 * WALL_SIZE)) : ZONE_SIZE;
-        const border_color = is_special_zone ? "#331a00" : "#004280";
-        const color = is_special_zone ? "#cc6900" : "#339cff";
+
+        const border_color = is_special_zone ? "#331a00" : (is_highlighted ? "#004280" : "#606060");
+        const color = is_special_zone ? "#cc6900" : (is_highlighted ? "#339cff" : "#b3b3b3");
+
         const text = id === "01" ? "01 Entry" : id;
 
         this.drawRectangle(
@@ -56,6 +61,28 @@ export default class WarehousePlant extends Component {
         this.ctx.fillRect(x, y, width, height);
     }
 
+    drawPath = () => {
+        const { path } = this.props;
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([5]);
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = "#808080";
+
+        this.ctx.moveTo(
+            (path[0].x * GRID_STEP) + WAREHOUSE_PADDING,
+            (path[0].y * GRID_STEP) + WAREHOUSE_PADDING,
+        );
+
+        for (let i = 1; i < path.length; ++i) {
+            this.ctx.lineTo(
+                (path[i].x * GRID_STEP) + WAREHOUSE_PADDING,
+                (path[i].y * GRID_STEP) + WAREHOUSE_PADDING,
+            );
+        }
+
+        this.ctx.stroke();
+    }
+
     async componentDidMount() {
         this.ctx = this.canvas.getContext("2d");
         this.ctx.font = "14px monospace";
@@ -68,7 +95,13 @@ export default class WarehousePlant extends Component {
 
         this.warehouse_plant = await getWarehousePlant();
 
+
+        if (this.props.path) {
+            this.drawPath();
+        }
+
         this.drawWarehousePlant();
+
     }
 
     render() {
@@ -83,3 +116,7 @@ export default class WarehousePlant extends Component {
         );
     }
 }
+
+WarehousePlant.propTypes = {
+    path: array,
+};

@@ -26,11 +26,12 @@ const create = useExpressValidators([
 ]);
 
 const path = useExpressValidators([
-    body("warehouse_zones")
-        .exists().withMessage("warehouse_zones must be specified").bail()
+    param("zones")
+        .exists().withMessage("zones must be specified").bail()
+        .customSanitizer((val) => val.split(","))
         .isArray({
             min: 1,
-        }).withMessage("warehouse_zones must be a non-empty Array"),
+        }).withMessage("zones must be a non-empty Array"),
 ]);
 
 const exists = async (req, res, next) => {
@@ -47,19 +48,19 @@ const exists = async (req, res, next) => {
 };
 
 const allExist = async (req, res, next) => {
-    const { warehouse_zones } = req.body;
+    const { zones } = req.params;
 
     req.locals = req.locals || {};
-    req.locals.warehouse_zones = [];
+    req.locals.zones = [];
 
-    for (const warehouse_zone_id of warehouse_zones) {
+    for (const warehouse_zone_id of zones) {
         const w = await warehouse_zone.findByPk(warehouse_zone_id);
         if (!w) {
             return res.status(404).json({
                 reason: `Warehouse Zone ${warehouse_zone_id} does not exist`,
             });
         }
-        req.locals.warehouse_zones.push(w.dataValues);
+        req.locals.zones.push(w.dataValues);
     }
 
     return next();
