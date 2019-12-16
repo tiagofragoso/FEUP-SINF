@@ -10,8 +10,7 @@ const Layout = ({ children, ...props }) => (
             { children }
         </div>
     </>
-)
-    ;
+);
 
 Layout.propTypes = {
     children: any.isRequired,

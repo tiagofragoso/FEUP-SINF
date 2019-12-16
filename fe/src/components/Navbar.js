@@ -4,6 +4,7 @@ import { Menu, Icon } from "antd";
 import { string } from "prop-types";
 
 import logo from "../assets/logo.png";
+import UserArea from "./UserArea";
 
 const Navbar = ({ currentPath }) => {
     const [, basePath] = currentPath.match(/^([^/]*)\/?.*$/);
@@ -14,7 +15,11 @@ const Navbar = ({ currentPath }) => {
             selectedKeys={basePath}
         >
             <Menu.Item key="logo">
-                <img alt="logo" src={logo} height="30px" />
+                <Link
+                    to="/"
+                >
+                    <img alt="logo" src={logo} height="30px" />
+                </Link>
             </Menu.Item>
             <Menu.Item key="sales">
                 <Link
@@ -47,6 +52,9 @@ const Navbar = ({ currentPath }) => {
                     <Icon type="solution" />
                     Picking waves
                 </Link>
+            </Menu.Item>
+            <Menu.Item>
+                <UserArea />
             </Menu.Item>
         </Menu>
     );

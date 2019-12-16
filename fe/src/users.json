@@ -1,0 +1,7 @@
+[
+    {"username": "johndoe", "name": "John Doe", "password": "password123"},
+    {"username": "maggiej", "name": "Margaret Jackson", "password": "password123"},
+    {"username": "brucewayne", "name": "Bruce Wayne", "password": "notbatman"},
+    {"username": "peterp", "name": "Peter Parker", "password": "spiderman123"},
+    {"username": "starktony", "name": "Tony Stark", "password": "ironman"}
+]
