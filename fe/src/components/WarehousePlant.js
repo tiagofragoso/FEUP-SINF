@@ -7,8 +7,7 @@ const WAREHOUSE_HEIGHT = 200;
 const GRID_STEP = 100;
 const WAREHOUSE_PADDED_WIDTH = WAREHOUSE_WIDTH + (2 * WAREHOUSE_PADDING);
 const WAREHOUSE_PADDED_HEIGHT =  WAREHOUSE_HEIGHT + (2 * WAREHOUSE_PADDING);
-const ZONE_HEIGHT = 40;
-const ZONE_WIDTH = 70;
+const ZONE_SIZE = 90;
 const ZONE_PADDING = 1;
 const WALL_SIZE = 5;
 
@@ -23,23 +22,23 @@ export default class WarehousePlant extends Component {
 
     drawWarehouseZone = (x, y, id) => {
         const is_special_zone = SPECIAL_ZONES.includes(id);
-        const height = is_special_zone ? ZONE_WIDTH : ZONE_HEIGHT;
+        const height = is_special_zone ? (WAREHOUSE_PADDED_HEIGHT - (2 * WALL_SIZE)) : ZONE_SIZE;
         const border_color = is_special_zone ? "#331a00" : "#004280";
         const color = is_special_zone ? "#cc6900" : "#339cff";
         const text = id === "01" ? "01 Entry" : id;
 
         this.drawRectangle(
-            WAREHOUSE_PADDING + (x * GRID_STEP) - (ZONE_WIDTH / 2) - ZONE_PADDING,
+            WAREHOUSE_PADDING + (x * GRID_STEP) - (ZONE_SIZE / 2) - ZONE_PADDING,
             WAREHOUSE_PADDING + (y * GRID_STEP) - (height / 2) - ZONE_PADDING,
-            ZONE_WIDTH + (2 * ZONE_PADDING),
+            ZONE_SIZE + (2 * ZONE_PADDING),
             height + (2 * ZONE_PADDING),
             border_color
         );
 
         this.drawRectangle(
-            WAREHOUSE_PADDING + (x * GRID_STEP) - (ZONE_WIDTH / 2),
+            WAREHOUSE_PADDING + (x * GRID_STEP) - (ZONE_SIZE / 2),
             WAREHOUSE_PADDING + (y * GRID_STEP) - (height / 2),
-            ZONE_WIDTH,
+            ZONE_SIZE,
             height,
             color
         );
@@ -59,7 +58,7 @@ export default class WarehousePlant extends Component {
 
     async componentDidMount() {
         this.ctx = this.canvas.getContext("2d");
-        this.ctx.font = "11px monospace";
+        this.ctx.font = "14px monospace";
         this.ctx.textBaseline = "middle";
         this.ctx.textAlign = "center";
 

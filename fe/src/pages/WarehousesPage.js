@@ -5,6 +5,7 @@ import { Link } from "@reach/router";
 
 import PageLayout from "../components/PageLayout";
 import useWarehouses from "../hooks/useWarehouses";
+import WarehousePlantModal from "../components/WarehousePlantModal";
 
 const KeyWithLink = (warehouseKey) => <Link to={warehouseKey}>{warehouseKey}</Link>;
 
@@ -27,6 +28,9 @@ const WarehousesPage = () => {
 
     return (
         <PageLayout title="Warehouse Zones">
+            <div style={{ marginBottom: "1.5em" }}>
+                <WarehousePlantModal />
+            </div>
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={loading} size="large" tip="Loading Warehouses...">
                 <Table dataSource={warehouses} columns={table_columns} rowKey="id" />
