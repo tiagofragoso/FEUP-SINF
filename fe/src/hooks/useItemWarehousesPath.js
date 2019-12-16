@@ -10,6 +10,7 @@ const useItemWarehousesPath = (not_picked_items) => {
     } = useSelector((state) => state.login);
 
     const [loading, setLoading] = useState(true);
+    const [zones, setZones] = useState(null);
     const [path, setPath] = useState(null);
 
 
@@ -21,7 +22,14 @@ const useItemWarehousesPath = (not_picked_items) => {
         }
 
         const fetchData = async (target_items) => {
-            const warehouse_zones = (await getItemWarehouse(target_items, access_token)).map((entry) => entry.itemWarehouse.warehouse);
+            const raw_warehouse_zones = await getItemWarehouse(target_items, access_token);
+            setZones(
+                raw_warehouse_zones
+                    .reduce((acc, { itemKey, itemWarehouse }) => ({ ...acc, [itemKey]: itemWarehouse && itemWarehouse.warehouse }), {})
+            );
+
+            const warehouse_zones = raw_warehouse_zones.filter((entry) => entry.itemWarehouse)
+                .map((entry) => entry.itemWarehouse.warehouse);
             const { path } = await getPath(warehouse_zones);
 
             if (!path) {
@@ -39,6 +47,7 @@ const useItemWarehousesPath = (not_picked_items) => {
     return {
         loading,
         path,
+        zones,
     };
 };
 

@@ -8,7 +8,7 @@ const WarehousePlantModal = ({ path, loading }) => {
 
     return (
         <>
-            <Button type="primary" loading={loading} onClick={() => setVisible(true)}>
+            <Button type="primary" loading={loading} onClick={() => setVisible(true)} disabled={path && path.length <= 2}>
                 {path ? "Show Wave Path" : "Show Warehouse Plant"}
             </Button>
             <Modal

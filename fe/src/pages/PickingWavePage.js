@@ -13,6 +13,10 @@ const salesOrderWithLink = (sales_order_id) => (
     <Link to={`/sales/${sales_order_id}`}>{sales_order_id}</Link>
 );
 
+const warehouseZoneWithLink = (warehouse_zone_key) => (
+    <Link to={`/warehouse-zones/${warehouse_zone_key}`}>{warehouse_zone_key}</Link>
+);
+
 const PickingWavePage = ({ id }) => {
     const dispatch = useDispatch();
     const {
@@ -27,6 +31,7 @@ const PickingWavePage = ({ id }) => {
     const {
         loading: pathLoading,
         path,
+        zones,
     } = useItemWarehousesPath(not_picked_items);
 
     const pickItemButton = (_, item) => (
@@ -47,6 +52,12 @@ const PickingWavePage = ({ id }) => {
             key: "name",
         },
         {
+            title: "Warehouse",
+            dataIndex: "item_key",
+            key: "warehouse",
+            render: (item_key) => zones && ((zones[item_key] && warehouseZoneWithLink(zones[item_key])) || "N/A"),
+        },
+        {
             title: "Quantity",
             dataIndex: "quantity",
             key: "quantity",
@@ -65,7 +76,7 @@ const PickingWavePage = ({ id }) => {
         },
     ];
 
-    const picked_items_table_columns = not_picked_items_table_columns.slice(0, 4);
+    const picked_items_table_columns = [...not_picked_items_table_columns.slice(0, 2), ...not_picked_items_table_columns.slice(3, 5)];
 
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>

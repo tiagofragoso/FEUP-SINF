@@ -27,7 +27,9 @@ export default class WarehousePlant extends Component {
 
         const height = is_special_zone ? (WAREHOUSE_PADDED_HEIGHT - (2 * WALL_SIZE)) : ZONE_SIZE;
 
+        // eslint-disable-next-line no-nested-ternary
         const border_color = is_special_zone ? "#331a00" : (is_highlighted ? "#004280" : "#606060");
+        // eslint-disable-next-line no-nested-ternary
         const color = is_special_zone ? "#cc6900" : (is_highlighted ? "#339cff" : "#b3b3b3");
 
         const text = id === "01" ? "01 Entry" : id;

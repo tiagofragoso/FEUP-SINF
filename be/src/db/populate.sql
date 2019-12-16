@@ -13,6 +13,7 @@ insert into picking_waves(name, due_date) values("Leiria Sounds", "28-12-2019");
 
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("YAMAHA_YCL-457II-22", 1, "46B", "Yamaha YCL 457II-22 Clarinet", 1);
 insert into items(item_key, picking_wave, sales_order, name, quantity) values("MODERN_OBOE", 1, "11C", "Modern Oboe", 2);
+insert into items(item_key, picking_wave, sales_order, name, quantity) values("METAL_KAZOO", 1, "11C", "Golden Metal Kazoo", 1);
 insert into items(item_key, picking_wave, sales_order, name, quantity, is_picked) values("PT_GUITAR", 1, "11D", "Portuguese Guitar", 3, "true");
 
 ---------------------
