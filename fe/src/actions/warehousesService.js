@@ -153,3 +153,19 @@ export const createStockTransferOrder = (sourceWarehouse, targetWarehouse, items
                 documentLines: items.map(({ id, quantity }) => ({ materialsItem: id, quantity })),
             }),
         });
+
+export const getWarehousePlant = async () => {
+    try {
+        const res = await fetch("/sinfony-api/warehouse-zone");
+
+        if (res.status !== 200) {
+            console.error("Failed to get warehouse plant: ", res.status);
+            return null;
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.error("rip", err);
+        return null;
+    }
+};
