@@ -6,6 +6,8 @@ const initialState = {
     error: false,
     createLoading: false,
     createError: false,
+    addItemsLoading: false,
+    addItemsError: false,
 };
 
 export default (state = initialState, action) => {
@@ -40,6 +42,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 createError: action.payload || true,
+            };
+        case pickingWaveTypes.ADD_ITEMS_LOADING:
+            return {
+                ...state,
+                addItemsLoading: action.payload,
+            };
+        case pickingWaveTypes.ADD_ITEMS_ERROR:
+            return {
+                ...state,
+                addItemsError: action.payload || true,
             };
         default:
             return state;

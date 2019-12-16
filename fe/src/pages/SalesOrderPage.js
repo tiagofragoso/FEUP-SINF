@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import HeaderWithAction from "../components/HeaderWithAction";
 import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
-import { createPickingWave, getPickingWaves } from "../actions/pickingWavesService";
+import { createPickingWave, addItemsToPickingWave, getPickingWaves } from "../actions/pickingWavesService";
 import formatDate from "../utils/formatDate";
 
 const SalesOrderPage = ({ order_id }) => {
@@ -18,7 +18,7 @@ const SalesOrderPage = ({ order_id }) => {
         access_token,
     } = useSelector((state) => state.login);
     const {
-        pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError,
+        pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError, addItemsLoading,
     } = useSelector((state) => state.pickingWaves);
 
     const [selectedItems, selectItem] = useState([]);
@@ -42,11 +42,12 @@ const SalesOrderPage = ({ order_id }) => {
                         <Col span={10}>
                             {form.getFieldDecorator("id", {})(
                                 <Select
+                                    required
                                     notFoundContent={pickingWavesLoading || pickingWavesError ? <Spin size="small" /> : null}
                                     placeholder="Select picking wave"
                                 >
                                     { pickingWaves &&
-                                        pickingWaves.active.map((p) => <Select.Option key={p.id}>{p.name}</Select.Option>) }
+                                        pickingWaves.active.map((p) => <Select.Option value={p.id} key={p.id}>{p.name}</Select.Option>) }
                                 </Select>
                             )}
                         </Col>
@@ -103,8 +104,20 @@ const SalesOrderPage = ({ order_id }) => {
 
     const handleSubmit = () => {
         const { current: { form } } = formRef;
-        console.log(form.getFieldsValue());
-        // dispatch(createGoodsReceipt(order, form.getFieldsValue()));
+
+        // Remove create picking wave fields because 🍝
+        const serialized = Object.entries(form.getFieldsValue())
+            .filter(([key]) =>
+                !["id", "name", "date"].includes(key))
+            .map(([key, quantity]) => ({
+                item_key: key,
+                sales_order: order.naturalKey,
+                name: items.not_shipped.find((e) => e.salesItem === key).description,
+                quantity,
+            }));
+        console.log(serialized);
+
+        dispatch(addItemsToPickingWave(form.getFieldValue("id"), serialized));
         setVisibleModal(false);
     };
 
@@ -203,11 +216,11 @@ const SalesOrderPage = ({ order_id }) => {
                 <>
                     <br/>
                     <HeaderWithAction
-                        title={`Not Received (${items.not_shipped.length})`}
+                        title={`Not Shipped (${items.not_shipped.length})`}
                         btnLabel="Add to picking wave"
                         btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
                         btnDisabled={selectedItems.length === 0}
-                        btnLoading={false}
+                        btnLoading={addItemsLoading}
                         onClick={addToPickingWave}
                     />
                     <br />
@@ -242,6 +255,60 @@ const SalesOrderPage = ({ order_id }) => {
                     <Typography.Title level={4}>Shipped ({items.shipped.length})</Typography.Title>
                     <Table
                         dataSource={items.shipped} columns={[
+                            {
+                                title: "",
+                                dataIndex: "image_stuff",
+                                key: "image_stuff",
+                                // render: img,
+                            },
+                            {
+                                title: "Item",
+                                dataIndex: "salesItem",
+                                key: "salesItem",
+                            },
+                            {
+                                title: "Description",
+                                dataIndex: "description",
+                                key: "description",
+                            },
+                            {
+                                title: "Quantity",
+                                dataIndex: "quantity",
+                                key: "quantity",
+                            },
+                        ]} rowKey="salesItem"
+                    />
+                    <br/>
+                    <Typography.Title level={4}>Awaiting picking ({items.not_picked.length})</Typography.Title>
+                    <Table
+                        dataSource={items.not_picked} columns={[
+                            {
+                                title: "",
+                                dataIndex: "image_stuff",
+                                key: "image_stuff",
+                                // render: img,
+                            },
+                            {
+                                title: "Item",
+                                dataIndex: "salesItem",
+                                key: "salesItem",
+                            },
+                            {
+                                title: "Description",
+                                dataIndex: "description",
+                                key: "description",
+                            },
+                            {
+                                title: "Quantity",
+                                dataIndex: "quantity",
+                                key: "quantity",
+                            },
+                        ]} rowKey="salesItem"
+                    />
+                    <br/>
+                    <Typography.Title level={4}>Picked ({items.picked.length})</Typography.Title>
+                    <Table
+                        dataSource={items.picked} columns={[
                             {
                                 title: "",
                                 dataIndex: "image_stuff",

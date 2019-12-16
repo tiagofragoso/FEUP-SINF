@@ -7,6 +7,8 @@ export const pickingWaveTypes = Object.freeze({
     ADD_NEW_PICKING_WAVE: "ADD_NEW_PICKING_WAVE",
     CREATE_PICKING_WAVE_LOADING: "CREATE_PICKING_WAVE_LOADING",
     CREATE_PICKING_WAVE_ERROR: "CREATE_PICKING_WAVE_ERROR",
+    ADD_ITEMS_LOADING: "ADD_ITEMS_LOADING",
+    ADD_ITEMS_ERROR: "ADD_ITEMS_ERROR",
 });
 
 export const setPickingWaves = createAction(pickingWaveTypes.SET_PICKING_WAVES);
@@ -15,3 +17,5 @@ export const setPickingWavesError = createAction(pickingWaveTypes.SET_PICKING_WA
 export const addNewPickingWave = createAction(pickingWaveTypes.ADD_NEW_PICKING_WAVE);
 export const setCreatePickingWaveLoading = createAction(pickingWaveTypes.CREATE_PICKING_WAVE_LOADING);
 export const setCreatePickingWaveError = createAction(pickingWaveTypes.CREATE_PICKING_WAVE_ERROR);
+export const setAddItemsLoading = createAction(pickingWaveTypes.ADD_ITEMS_LOADING);
+export const setAddItemsError = createAction(pickingWaveTypes.ADD_ITEMS_ERROR);

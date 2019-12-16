@@ -14,9 +14,9 @@ const isUnique = async (req, res, next) => {
 };
 
 const exists = async (req, res, next) => {
-    const { item_key } = req.params;
+    const { item_id } = req.params;
 
-    const i = await item.findByPk(item_key);
+    const i = await item.findByPk(item_id);
     if (!i) {
         return res.status(404).send();
     }

@@ -9,7 +9,7 @@ import OrderStatusLabel from "../components/OrderStatusLabel";
 import formatDate from "../utils/formatDate";
 
 
-const IdWithLink = (key, record) => <Link to={record.id}>{key}</Link>;
+const KeyWithLink = (key) => <Link to={key}>{key}</Link>;
 
 const table_columns = [
     {
@@ -22,7 +22,7 @@ const table_columns = [
         title: "Order ID",
         dataIndex: "naturalKey",
         key: "naturalKey",
-        render: IdWithLink,
+        render: KeyWithLink,
     },
     {
         title: "Entity",

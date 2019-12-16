@@ -11,8 +11,9 @@ CREATE TABLE picking_waves (
 
 DROP TABLE IF EXISTS items;
 CREATE TABLE items (
-    item_key TEXT PRIMARY KEY,
-    picking_wave REFERENCES picking_waves (id) NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_key TEXT NOT NULL,
+    picking_wave_id REFERENCES picking_waves (id) NOT NULL,
     sales_order TEXT NOT NULL,
     name TEXT NOT NULL,
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,

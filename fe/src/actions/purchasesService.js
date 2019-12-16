@@ -30,9 +30,11 @@ export const getPurchaseOrders = () => async (dispatch, getState) => {
 export const getPurchaseOrder = (id) => async (dispatch, getState) => {
     dispatch(setCurrentPurchaseOrderLoading(true));
 
+    const primaveraPath = id.replace(/\./g, "/");
+
     const { login } = getState();
     try {
-        const res = await fetch(`/api/${config.tenant}/${config.organization}/purchases/orders/${id}`, login.access_token);
+        const res = await fetch(`/api/${config.tenant}/${config.organization}/purchases/orders/${config.company}/${primaveraPath}`, login.access_token);
 
         if (res.status !== 200) {
             console.error("getting purchase order failed:", res.status);

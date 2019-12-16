@@ -176,7 +176,7 @@ const PickingWavePage = ({ id }) => {
                 <>
                     <Typography.Title level={4}>{"Items to Pick"}</Typography.Title>
                     <Spin spinning={loading} size="large" tip="Loading Items to Pick...">
-                        <Table dataSource={not_picked_items} columns={not_picked_items_table_columns} rowKey="item_key" />
+                        <Table dataSource={not_picked_items} columns={not_picked_items_table_columns} rowKey="id" />
                     </Spin>
                 </>
             }
