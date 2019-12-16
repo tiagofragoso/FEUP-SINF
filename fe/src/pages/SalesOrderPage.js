@@ -25,8 +25,6 @@ const SalesOrderPage = ({ order_id }) => {
 
     const [visibleModal, setVisibleModal] = useState(false);
 
-    const [selectedItemQuantities, setSelectedItemsQuantities] = useState([]);
-
     const [isCreatingPickingWave, setIsCreatingPickingWave] = useState(false);
 
     const formRef = useRef(null);
@@ -94,15 +92,18 @@ const SalesOrderPage = ({ order_id }) => {
 
     const WrappedForm = Form.create()(formEl);
 
-    const formItems = (getFieldDecorator) => selectedItemQuantities.map((iq) => (
-        <Form.Item key={iq.item} label={iq.item} labelCol={{ span: 12 }} labelAlign="left">
-            {getFieldDecorator(iq.item, {
-                initialValue: iq.quantity,
-            })(<InputNumber min={1} max={iq.quantity} />)}
-        </Form.Item>
-    ));
+    const formItems = (getFieldDecorator) =>
+        selectedItems.map((key) => {
+            const quantity = items.not_shipped.find((e) => e.salesItem === key).quantity;
+            return (
+                <Form.Item key={key} label={key} labelCol={{ span: 12 }} labelAlign="left">
+                    {getFieldDecorator(key, {
+                        initialValue: quantity,
+                    })(<InputNumber min={1} max={quantity} />)}
+                </Form.Item>);
+        });
 
-    const handleSubmit = () => {
+    const handleSubmitAddToPickingWave = () => {
         const { current: { form } } = formRef;
 
         // Remove create picking wave fields because 🍝
@@ -115,26 +116,21 @@ const SalesOrderPage = ({ order_id }) => {
                 name: items.not_shipped.find((e) => e.salesItem === key).description,
                 quantity,
             }));
-        console.log(serialized);
 
         dispatch(addItemsToPickingWave(form.getFieldValue("id"), serialized));
         setVisibleModal(false);
     };
 
-    const addToPickingWave = () => {
+    const openAddToPickingWaveModal = () => {
         dispatch(getPickingWaves());
         setIsCreatingPickingWave(false);
         setVisibleModal(true);
-        setSelectedItemsQuantities(selectedItems.map((key) => ({
-            item: key,
-            quantity: items.not_shipped.find((e) => e.salesItem === key).quantity,
-        })));
     };
 
     const handleSubmitPickingWave = async () => {
         const { current: { form } } = formRef;
         const { name, date } = form.getFieldsValue();
-        if (name || date) {
+        if (name && date) {
             const data = await dispatch(createPickingWave({ name, date }));
             if (data && !createError) {
                 setIsCreatingPickingWave(false);
@@ -147,16 +143,6 @@ const SalesOrderPage = ({ order_id }) => {
         const { current: { form } } = formRef;
         form.setFieldsValue({ id });
     };
-
-    // const hasSelectedPickingWave = () => {
-    //     if (formRef.current) {
-    //         const { current: { form } } = formRef;
-    //         console.log(form.getFieldValue("pickingWave"));
-    //         return !!form.getFieldValue("pickingWave");
-    //     } else {
-    //         return false;
-    //     }
-    // };
 
     // useEffect with empty dependencies array functions simillarly to componentDidMount
     useEffect(() => {
@@ -221,7 +207,7 @@ const SalesOrderPage = ({ order_id }) => {
                         btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
                         btnDisabled={selectedItems.length === 0}
                         btnLoading={addItemsLoading}
-                        onClick={addToPickingWave}
+                        onClick={openAddToPickingWaveModal}
                     />
                     <br />
                     <Table
@@ -336,7 +322,7 @@ const SalesOrderPage = ({ order_id }) => {
                         centered
                         title="Add to picking wave"
                         visible={visibleModal}
-                        onOk={handleSubmit}
+                        onOk={handleSubmitAddToPickingWave}
                         onCancel={() => setVisibleModal(false)}
                         okText="Submit"
                     >
