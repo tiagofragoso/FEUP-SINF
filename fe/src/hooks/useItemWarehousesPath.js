@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getItemWarehouse } from "../actions/warehousesService";
 import { getPath } from "../actions/pickingWavesService";
 
-const useItemWarehousesPath = (not_picked_items) => {
+const useItemWarehousesPath = (items, get_path = true) => {
     const {
         access_token,
     } = useSelector((state) => state.login);
@@ -17,7 +17,7 @@ const useItemWarehousesPath = (not_picked_items) => {
     useEffect(() => {
         setLoading(true);
 
-        if (!access_token || !not_picked_items) {
+        if (!access_token || !items) {
             return;
         }
 
@@ -30,19 +30,19 @@ const useItemWarehousesPath = (not_picked_items) => {
 
             const warehouse_zones = raw_warehouse_zones.filter((entry) => entry.itemWarehouse)
                 .map((entry) => entry.itemWarehouse.warehouse);
-            const { path } = await getPath(warehouse_zones);
 
-            if (!path) {
-                return;
+            if (get_path) {
+                const { path } = await getPath(warehouse_zones);
+
+                setPath(path);
             }
 
-            setPath(path);
             setLoading(false);
         };
 
-        const target_items = not_picked_items.map(({ item_key: itemKey, quantity: desiredQuantity }) => ({ itemKey, desiredQuantity }));
+        const target_items = items.map(({ item_key: itemKey, quantity: desiredQuantity }) => ({ itemKey, desiredQuantity }));
         fetchData(target_items);
-    }, [access_token, not_picked_items]);
+    }, [access_token, get_path, items]);
 
     return {
         loading,
