@@ -6,23 +6,23 @@ import { Link } from "@reach/router";
 import PageLayout from "../components/PageLayout";
 import { getPurchaseOrders } from "../actions/purchasesService";
 import OrderStatusLabel from "../components/OrderStatusLabel";
-import formatDate from "../utils/formatDate";
+import { formatDate } from "../utils/formatDate";
 
 
 const KeyWithLink = (key) => <Link to={key}>{key}</Link>;
 
 const table_columns = [
     {
-        title: "Date",
-        dataIndex: "documentDate",
-        key: "documentDate",
-        render: formatDate,
-    },
-    {
         title: "Order ID",
         dataIndex: "naturalKey",
         key: "naturalKey",
         render: KeyWithLink,
+    },
+    {
+        title: "Date",
+        dataIndex: "documentDate",
+        key: "documentDate",
+        render: formatDate,
     },
     {
         title: "Supplier",

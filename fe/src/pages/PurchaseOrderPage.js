@@ -7,7 +7,7 @@ import PageLayout from "../components/PageLayout";
 import { getPurchaseOrder } from "../actions/purchasesService";
 import { createGoodsReceipt } from "../actions/goodsReceiptService";
 import HeaderWithAction from "../components/HeaderWithAction";
-import formatDate from "../utils/formatDate";
+import { formatDate } from "../utils/formatDate";
 
 const PurchaseOrderPage = ({ order_id }) => {
     const dispatch = useDispatch();

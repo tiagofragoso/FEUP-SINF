@@ -8,7 +8,7 @@ import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
 import { createPickingWave, addItemsToPickingWave, getPickingWaves } from "../actions/pickingWavesService";
 import { createDeliveryOrder } from "../actions/deliveryOrderService";
-import formatDate from "../utils/formatDate";
+import { formatDate } from "../utils/formatDate";
 
 const SalesOrderPage = ({ order_id }) => {
     const dispatch = useDispatch();
