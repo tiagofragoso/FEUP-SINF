@@ -10,7 +10,7 @@ const { Op } = require("sequelize");
 const getPWaveProgress = async (pwave_id) => {
     const items = flattenQueryResults(await item.findAll({
         where: {
-            picking_wave: pwave_id,
+            picking_wave_id: pwave_id,
         },
     }));
 

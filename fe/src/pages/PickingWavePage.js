@@ -9,6 +9,7 @@ import PageLayout from "../components/PageLayout";
 import WarehousePlantModal from "../components/WarehousePlantModal";
 import useItemWarehousesPath from "../hooks/useItemWarehousesPath";
 import useMoveItemsBetweenWarehouses from "../hooks/useMoveItemsBetweenWarehouses";
+import { formatDate } from "../utils/formatDate";
 
 const salesOrderWithLink = (sales_order_id) => (
     <Link to={`/sales/${sales_order_id}`}>{sales_order_id}</Link>
@@ -42,7 +43,7 @@ const PickingWavePage = ({ id }) => {
     } = useItemWarehousesPath(picked_items, false);
 
     const pickItemButton = (_, item) => (
-        <Button disabled={!zones || !zones[item.item_key]} onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
+        <Button disabled={!zones || !zones[item.item_key]} onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave_id, item.id))}>
             Pick
         </Button>
     );
@@ -168,7 +169,7 @@ const PickingWavePage = ({ id }) => {
 
             {info &&
                 <div style={{ marginBottom: "1.5em", fontSize: "1.15em" }}>
-                    <strong>Due Date:</strong> {info.due_date}
+                    <strong>Due Date:</strong> {formatDate(info.due_date)}
                 </div>
             }
 

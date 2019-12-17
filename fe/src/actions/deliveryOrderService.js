@@ -24,6 +24,7 @@ export const createDeliveryOrder = (orderKey, items) => async (dispatch, getStat
         }
 
         const orderLinesData = await orderLinesRes.json();
+
         const orderLines = orderLinesData.filter((v) => (
             v.sourceDocKey === orderKey && !!items[v.item]
         )).map(({ item, sourceDocKey, sourceDocLineNumber }) => ({
@@ -43,7 +44,7 @@ export const createDeliveryOrder = (orderKey, items) => async (dispatch, getStat
         );
 
         if (deliveryOrderRes.status !== 201) {
-            console.error("creating goods receipts failed:", deliveryOrderRes.status);
+            console.error("generating delivery order failed:", deliveryOrderRes.status);
             const data = await deliveryOrderRes.json();
             dispatch(setDeliveryOrderError(data));
             dispatch(setDeliveryOrderLoading(false));
