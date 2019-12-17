@@ -6,7 +6,7 @@ const initialState = Object.freeze({
     error: false,
 });
 
-const LOCALSTORAGE_KEY = "sinfony-user-ls-key";
+export const LOCALSTORAGE_KEY = "sinfony-user-ls-key";
 
 export default (state = initialState, action) => {
     switch (action.type) {
