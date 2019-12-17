@@ -20,25 +20,29 @@ const get = useExpressValidators([
         .toInt(),
 ]);
 
-const addItem = useExpressValidators([
+const addItems = useExpressValidators([
     param("id")
         .exists().withMessage("Picking Wave ID must be specified").bail()
         .isInt().withMessage("Picking Wave ID must be an Integer")
         .toInt(),
 
-    body("item_key")
+    body("items")
+        .exists().withMessage("Items must be specified").bail()
+        .isArray({ min: 1 }).withMessage("At least 1 item should be provided"),
+
+    body("items.*.item_key")
         .exists().withMessage("Item Key must be specified").bail()
         .isString().withMessage("Item Key must be a String"),
 
-    body("sales_order")
+    body("items.*.sales_order")
         .exists().withMessage("Sales Order ID must be specified").bail()
         .isString().withMessage("Sales Order ID must be a String"),
 
-    body("name")
+    body("items.*.name")
         .exists().withMessage("Item Name must be specified").bail()
         .isString().withMessage("Item Name must be a String"),
 
-    body("quantity")
+    body("items.*.quantity")
         .exists().withMessage("Item Quantity must be specified").bail()
         .isInt({
             min: 0,
@@ -65,6 +69,6 @@ const exists = async (req, res, next) => {
 module.exports = {
     create,
     get,
-    addItem,
+    addItems,
     exists,
 };

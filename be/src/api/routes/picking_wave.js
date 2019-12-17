@@ -10,7 +10,7 @@ const { Op } = require("sequelize");
 const getPWaveProgress = async (pwave_id) => {
     const items = flattenQueryResults(await item.findAll({
         where: {
-            picking_wave: pwave_id,
+            picking_wave_id: pwave_id,
         },
     }));
 
@@ -67,7 +67,7 @@ module.exports = (app) => {
 
         const items = await item.findAll({
             where: {
-                picking_wave: id,
+                picking_wave_id: id,
             },
         });
 
@@ -106,7 +106,7 @@ module.exports = (app) => {
     router.post("/", picking_wave_validators.create, async (req, res) => {
         const { name, due_date } = req.body;
 
-        await picking_wave.create(
+        const pwave = await picking_wave.create(
             {
                 name,
                 due_date,
@@ -116,31 +116,44 @@ module.exports = (app) => {
             },
         );
 
-        return res.status(201).send();
+        return res.status(201).json(pwave);
     });
 
     /**
      * Adds new Items to Picking Wave
      */
-    router.patch("/:id", picking_wave_validators.addItem, picking_wave_validators.exists, item_validators.isUnique, async (req, res) => {
+    router.patch("/:id", picking_wave_validators.addItems, picking_wave_validators.exists, async (req, res) => {
         const { id } = req.params;
+        const { items } = req.body;
 
-        const {
-            item_key, sales_order, name, quantity,
-        } = req.body;
+        await Promise.all(items.map(async ({ item_key, sales_order, name, quantity }) => {
+            const i = await item.findAll({
+                where: {
+                    item_key,
+                    sales_order,
+                    picking_wave_id: id,
+                },
+            });
 
-        await item.create(
-            {
-                item_key,
-                picking_wave: id,
-                sales_order,
-                name,
-                quantity,
-            },
-            {
-                fields: ["item_key", "picking_wave", "sales_order", "name", "quantity"],
-            },
-        );
+            if (i[0]) {
+                return i[0].update({
+                    quantity: i[0].quantity + quantity,
+                });
+            } else {
+                return item.create(
+                    {
+                        item_key,
+                        picking_wave_id: id,
+                        sales_order,
+                        name,
+                        quantity,
+                    },
+                    {
+                        fields: ["item_key", "picking_wave_id", "sales_order", "name", "quantity"],
+                    },
+                );
+            }
+        }));
 
         return res.status(201).send();
     });
@@ -148,7 +161,7 @@ module.exports = (app) => {
     /**
      * Picks an Item from the Picking wave
      */
-    router.put("/:id/item/:item_key", picking_wave_validators.exists, item_validators.exists, (req, res) => {
+    router.put("/:id/item/:item_id", picking_wave_validators.exists, item_validators.exists, (req, res) => {
         const { i } = req.locals;
 
         i.update({

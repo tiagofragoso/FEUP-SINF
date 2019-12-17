@@ -3,11 +3,16 @@ const db = require("../db/db");
 const picking_wave = require("./picking_wave");
 
 const item = db.define("items", {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     item_key: {
         type: Sequelize.STRING,
-        primaryKey: true,
+        allowNull: false,
     },
-    picking_wave: {
+    picking_wave_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -34,6 +39,8 @@ const item = db.define("items", {
         allowNull: false,
         defaultValue: "false",
     },
-});
+}, { underscored: true });
+
+item.belongsTo(picking_wave);
 
 module.exports = item;

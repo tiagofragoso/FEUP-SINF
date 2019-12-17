@@ -31,11 +31,11 @@ export default (state = initialState, action) => {
                 error: action.payload || true,
             };
         case currentPickingWaveTypes.PICK_ITEM:
-            const item_key = action.payload;
+            const id = action.payload;
             const { picked_items, not_picked_items } = state;
 
             for (let i = 0; i < not_picked_items.length; ++i) {
-                if (not_picked_items[i].item_key === item_key) {
+                if (not_picked_items[i].id === id) {
                     const [item] = not_picked_items.splice(i, 1);
                     picked_items.push(item);
                     break;
@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
                 not_picked_items: [...not_picked_items],
                 pickItemStatus: {
                     status: "success",
-                    message: `Successfully picked Item ${item_key}`,
+                    message: `Successfully picked Item ${id}`,
                 },
             };
         case currentPickingWaveTypes.PICK_ITEM_ERROR:

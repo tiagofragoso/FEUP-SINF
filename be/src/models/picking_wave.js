@@ -20,6 +20,6 @@ const picking_wave = db.define("picking_waves", {
         allowNull: false,
         defaultValue: "false",
     },
-});
+}, { underscored: true });
 
 module.exports = picking_wave;

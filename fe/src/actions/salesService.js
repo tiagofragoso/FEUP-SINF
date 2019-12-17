@@ -30,20 +30,35 @@ export const getSalesOrders = () => async (dispatch, getState) => {
 export const getSalesOrder = (id) => async (dispatch, getState) => {
     dispatch(setCurrentSalesOrderLoading(true));
 
+    const primaveraPath = id.replace(/\./g, "/");
+
     const { login } = getState();
     try {
-        const res = await fetch(`/api/${config.tenant}/${config.organization}/sales/orders/${id}`, login.access_token);
+        const orderItems = await fetch(`/api/${config.tenant}/${config.organization}/sales/orders/${config.company}/${primaveraPath}`, login.access_token);
 
-        if (res.status !== 200) {
-            console.error("getting sales order failed:", res.status);
-            const data = await res.json();
+        if (orderItems.status !== 200) {
+            console.error("getting sales order failed:", orderItems.status);
+            const data = await orderItems.json();
             dispatch(setCurrentSalesOrderError(data));
             dispatch(setCurrentSalesOrderLoading(false));
             return;
         }
 
-        const data = await res.json();
-        dispatch(setCurrentSalesOrder(data));
+        const orderItemsData = await orderItems.json();
+
+        const pWaveItems = await fetch(`/sinfony-api/sales-order/${id}/picked-items`);
+
+        if (pWaveItems.status !== 200) {
+            console.error("getting picking waves items failed:", pWaveItems.status);
+            const data = await pWaveItems.json();
+            dispatch(setCurrentSalesOrderError(data));
+            dispatch(setCurrentSalesOrderLoading(false));
+            return;
+        }
+
+        const pWaveItemsData = await pWaveItems.json();
+
+        dispatch(setCurrentSalesOrder({ order: orderItemsData, pWaveItems: pWaveItemsData }));
         dispatch(setCurrentSalesOrderLoading(false));
     } catch (err) {
         console.error("rip2", err);

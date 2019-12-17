@@ -1,8 +1,11 @@
-import { setPickingWaves, setPickingWavesError, setPickingWavesLoading } from "./pickingWavesActions";
+import { setPickingWaves, setPickingWavesError, setPickingWavesLoading, addNewPickingWave,
+    setCreatePickingWaveError, setCreatePickingWaveLoading, setAddItemsLoading, setAddItemsError,
+} from "./pickingWavesActions";
 import {
     setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading,
     pickItem, pickItemError, finishPickingWave, finishPickingWaveError,
 } from "./currentPickingWaveActions";
+import { getSalesOrder } from "./salesService";
 
 export const getPickingWaves = () => async (dispatch) => {
     dispatch(setPickingWavesLoading(true));
@@ -112,5 +115,60 @@ export const getPath = async (warehouse_zones) => {
         console.error("rip", err);
         return null;
     }
+};
 
+export const createPickingWave = ({ name, date }) => async (dispatch) => {
+    dispatch(setCreatePickingWaveLoading(true));
+    try {
+        const res = await fetch("/sinfony-api/picking-wave/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, due_date: date.format() }),
+        });
+
+        if (res.status !== 201) {
+            console.error("Failed to create picking wave:", res.status);
+            dispatch(setCreatePickingWaveError("Failed to create picking wave"));
+            dispatch(setCreatePickingWaveLoading(false));
+            return;
+        }
+
+        const data = await res.json();
+        dispatch(addNewPickingWave(data));
+        dispatch(setCreatePickingWaveLoading(false));
+
+        return data;
+    } catch (err) {
+        console.error("rip", err);
+        dispatch(setCreatePickingWaveError("idk"));
+        dispatch(setCreatePickingWaveLoading(false));
+    }
+    return null;
+};
+
+export const addItemsToPickingWave = (picking_wave_id, sales_order_id, items) => async (dispatch) => {
+    dispatch(setAddItemsLoading(true));
+
+    try {
+        const res = await fetch(`/sinfony-api/picking-wave/${picking_wave_id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items }),
+        });
+
+        if (res.status !== 201) {
+            console.error("Failed to add items to picking wave:", await res.json());
+            dispatch(setAddItemsError("Failed to add items to picking wave"));
+            dispatch(setAddItemsLoading(false));
+            return;
+        }
+
+        dispatch(getSalesOrder(sales_order_id));
+        dispatch(setAddItemsLoading(false));
+
+    } catch (err) {
+        console.error("rip", err);
+        dispatch(setAddItemsError("idk"));
+        dispatch(setAddItemsLoading(false));
+    }
 };
