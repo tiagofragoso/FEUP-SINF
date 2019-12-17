@@ -27,7 +27,6 @@ const PickingWavePage = ({ id }) => {
         dispatch(getPickingWave(id));
     }, [dispatch, id]);
 
-    // TODO: Passar loading ao botão e usar o path
     const {
         loading: pathLoading,
         path,

@@ -56,7 +56,7 @@ const allExist = async (req, res, next) => {
     for (const warehouse_zone_id of zones) {
         const w = await warehouse_zone.findByPk(warehouse_zone_id);
         if (!w) {
-            return res.status(404).json({
+            return res.status(400).json({
                 reason: `Warehouse Zone ${warehouse_zone_id} does not exist`,
             });
         }
