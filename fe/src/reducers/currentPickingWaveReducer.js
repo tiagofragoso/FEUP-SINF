@@ -16,8 +16,8 @@ export default (state = initialState, action) => {
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE:
             return {
                 ...state,
-                picked_items: action.payload.items.filter((item) => item.is_picked),
-                not_picked_items: action.payload.items.filter((item) => !item.is_picked),
+                picked_items: action.payload.items.filter(({ is_picked, quantity }) => is_picked && quantity),
+                not_picked_items: action.payload.items.filter(({ is_picked, quantity }) => !is_picked && quantity),
                 info: action.payload.info,
             };
         case currentPickingWaveTypes.SET_CURRENT_PICKING_WAVE_LOADING:
@@ -52,7 +52,7 @@ export default (state = initialState, action) => {
                 pickItemStatus: {
                     status: "success",
                     message: `Successfully picked Item ${item_key}`,
-                }
+                },
             };
         case currentPickingWaveTypes.PICK_ITEM_ERROR:
             return {
@@ -60,7 +60,7 @@ export default (state = initialState, action) => {
                 pickItemStatus: {
                     status: "error",
                     message: action.payload,
-                }
+                },
             };
         case currentPickingWaveTypes.FINISH_PICKING_WAVE:
             info.is_done = true;
@@ -70,17 +70,17 @@ export default (state = initialState, action) => {
                 info,
                 finishPickingWaveStatus: {
                     status: "success",
-                    message: `Successfully finished Picking Wave`,
-                }
+                    message: "Successfully finished Picking Wave",
+                },
             };
         case currentPickingWaveTypes.FINISH_PICKING_WAVE_ERROR:
-                return {
-                    ...state,
-                    finishPickingWaveStatus: {
-                        status: "error",
-                        message: action.payload,
-                    }
-                };
+            return {
+                ...state,
+                finishPickingWaveStatus: {
+                    status: "error",
+                    message: action.payload,
+                },
+            };
         default:
             return state;
     }

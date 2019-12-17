@@ -6,21 +6,33 @@ import { Link } from "@reach/router";
 
 import { getPickingWave, pickItemFromPickingWave, finishCurrentPickingWave } from "../actions/pickingWavesService";
 import PageLayout from "../components/PageLayout";
+import WarehousePlantModal from "../components/WarehousePlantModal";
+import useItemWarehousesPath from "../hooks/useItemWarehousesPath";
 
 const salesOrderWithLink = (sales_order_id) => (
     <Link to={`/sales/${sales_order_id}`}>{sales_order_id}</Link>
 );
 
+const warehouseZoneWithLink = (warehouse_zone_key) => (
+    <Link to={`/warehouse-zones/${warehouse_zone_key}`}>{warehouse_zone_key}</Link>
+);
+
 const PickingWavePage = ({ id }) => {
     const dispatch = useDispatch();
     const {
-        picked_items, not_picked_items, loading, error, info, pickItemStatus, finishPickingWaveStatus
+        picked_items, not_picked_items, loading, error, info, pickItemStatus, finishPickingWaveStatus,
     } = useSelector((state) => state.currentPickingWave);
 
     useEffect(() => {
         dispatch(getPickingWave(id));
     }, [dispatch, id]);
-    
+
+    const {
+        loading: pathLoading,
+        path,
+        zones,
+    } = useItemWarehousesPath(not_picked_items);
+
     const pickItemButton = (_, item) => (
         <Button onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
             Pick
@@ -39,6 +51,17 @@ const PickingWavePage = ({ id }) => {
             key: "name",
         },
         {
+            title: "Warehouse",
+            dataIndex: "item_key",
+            key: "warehouse",
+            render: (item_key) => zones && ((zones[item_key] && warehouseZoneWithLink(zones[item_key])) || "N/A"),
+        },
+        {
+            title: "Quantity",
+            dataIndex: "quantity",
+            key: "quantity",
+        },
+        {
             title: "Sales Order",
             dataIndex: "sales_order",
             key: "sales_order",
@@ -51,31 +74,32 @@ const PickingWavePage = ({ id }) => {
             render: pickItemButton,
         },
     ];
-    
-    const picked_items_table_columns = not_picked_items_table_columns.slice(0, 3);
-    
+
+    const picked_items_table_columns = [...not_picked_items_table_columns.slice(0, 2), ...not_picked_items_table_columns.slice(3, 5)];
+
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
-            {finishPickingWaveStatus && 
+            {finishPickingWaveStatus &&
                 <>
                     <Alert message={(finishPickingWaveStatus && finishPickingWaveStatus.message)} type={finishPickingWaveStatus.status} />
                     <br/>
                 </>
             }
-            
+
             {info && !info.is_done &&
                 <>
-                    <Button 
-                        type="primary" 
-                        loading={loading} 
+                    <WarehousePlantModal path={path} loading={pathLoading} />
+                    <Button
+                        type="primary"
+                        loading={loading}
                         disabled={not_picked_items ? not_picked_items.length > 0 : true}
                         onClick={() => dispatch(finishCurrentPickingWave(id))}
-                        
+                        style={{ marginLeft: "1em", marginRight: "1em" }}
                     >
                         Finish Picking Wave
                     </Button>
-                    {info.progress && 
-                        <span style={{marginLeft: "1em", fontSize: "1.2em"}}>
+                    {info.progress &&
+                        <span style={{ fontSize: "1.2em" }}>
                             {`Progress ${info.progress}`}
                         </span>
                     }
@@ -84,7 +108,7 @@ const PickingWavePage = ({ id }) => {
             }
 
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
-            {pickItemStatus && 
+            {pickItemStatus &&
                 <>
                     <Alert message={(pickItemStatus && pickItemStatus.message)} type={pickItemStatus.status} />
                     <br/>
@@ -98,7 +122,7 @@ const PickingWavePage = ({ id }) => {
                     </Spin>
                 </>
             }
-            
+
             {picked_items && picked_items.length > 0 &&
                 <>
                     <Typography.Title level={4}>{"Picked Items"}</Typography.Title>

@@ -25,7 +25,7 @@ const useMoveItemsBetweenWarehouses = () => {
             try {
                 const res = await createStockTransferOrder(sourceWarehouse, targetWarehouse, items, access_token);
                 const data = await res.json();
-                console.log(data);
+
                 if (res.status !== 201) {
                     setError(data);
                 } else {

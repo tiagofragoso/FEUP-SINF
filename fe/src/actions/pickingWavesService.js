@@ -1,15 +1,15 @@
 import { setPickingWaves, setPickingWavesError, setPickingWavesLoading } from "./pickingWavesActions";
-import { 
-    setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading, 
-    pickItem, pickItemError, finishPickingWave, finishPickingWaveError
+import {
+    setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading,
+    pickItem, pickItemError, finishPickingWave, finishPickingWaveError,
 } from "./currentPickingWaveActions";
 
 export const getPickingWaves = () => async (dispatch) => {
     dispatch(setPickingWavesLoading(true));
 
     try {
-        const active_waves_res = await fetch(`/sinfony-api/picking-wave`);
-        const finished_waves_res = await fetch(`/sinfony-api/picking-wave/finished`);
+        const active_waves_res = await fetch("/sinfony-api/picking-wave");
+        const finished_waves_res = await fetch("/sinfony-api/picking-wave/finished");
 
         if (active_waves_res.status !== 200 || finished_waves_res.status !== 200) {
             console.error("getting picking waves failed:", active_waves_res.status);
@@ -20,8 +20,8 @@ export const getPickingWaves = () => async (dispatch) => {
 
         const data = {
             active: await active_waves_res.json(),
-            finished: await finished_waves_res.json()
-        } 
+            finished: await finished_waves_res.json(),
+        };
 
         dispatch(setPickingWaves(data));
         dispatch(setPickingWavesLoading(false));
@@ -49,7 +49,7 @@ export const getPickingWave = (id) => async (dispatch) => {
         const data = {
             items: await items_res.json(),
             info: await info_res.json(),
-        }
+        };
 
         dispatch(setCurrentPickingWave(data));
         dispatch(setCurrentPickingWaveLoading(false));
@@ -77,7 +77,7 @@ export const pickItemFromPickingWave = (picking_wave_id, item_id) => async (disp
         console.error("rip", err);
         dispatch(pickItemError("Failed to pick item"));
     }
-}
+};
 
 export const finishCurrentPickingWave = (picking_wave_id) => async (dispatch) => {
     try {
@@ -96,4 +96,21 @@ export const finishCurrentPickingWave = (picking_wave_id) => async (dispatch) =>
         console.error("rip", err);
         dispatch(finishPickingWaveError("Failed to finish picking wave"));
     }
-}
+};
+
+export const getPath = async (warehouse_zones) => {
+    try {
+        const res = await fetch(`/sinfony-api/warehouse-zone/path/calculate/${encodeURI(["01", ...warehouse_zones, "EXIT"])}`);
+
+        if (res.status !== 200) {
+            console.error("Failed to get path:", res.status);
+            return null;
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.error("rip", err);
+        return null;
+    }
+
+};
