@@ -18,7 +18,7 @@ const SalesOrderPage = ({ order_id }) => {
         access_token,
     } = useSelector((state) => state.login);
     const {
-        pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError, addItemsLoading,
+        pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError, addItemsLoading, addItemsError,
     } = useSelector((state) => state.pickingWaves);
 
     const [selectedItems, selectItem] = useState([]);
@@ -117,7 +117,7 @@ const SalesOrderPage = ({ order_id }) => {
                 quantity,
             }));
 
-        dispatch(addItemsToPickingWave(form.getFieldValue("id"), serialized));
+        dispatch(addItemsToPickingWave(form.getFieldValue("id"), order.naturalKey, serialized));
         setVisibleModal(false);
     };
 
@@ -157,6 +157,8 @@ const SalesOrderPage = ({ order_id }) => {
     return (
         <PageLayout title="Sales Order">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
+            {createError && <Alert message={(createError && createError.message) || "Error creating picking wave"} type="error" />}
+            {addItemsError && <Alert message={(addItemsError && addItemsError.message) || "Error adding items to picking wave"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>

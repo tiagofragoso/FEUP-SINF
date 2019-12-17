@@ -5,6 +5,7 @@ import {
     setCurrentPickingWave, setCurrentPickingWaveError, setCurrentPickingWaveLoading,
     pickItem, pickItemError, finishPickingWave, finishPickingWaveError,
 } from "./currentPickingWaveActions";
+import { getSalesOrder } from "./salesService";
 
 export const getPickingWaves = () => async (dispatch) => {
     dispatch(setPickingWavesLoading(true));
@@ -118,6 +119,7 @@ export const getPath = async (warehouse_zones) => {
 
 export const createPickingWave = ({ name, date }) => async (dispatch) => {
     dispatch(setCreatePickingWaveLoading(true));
+    dispatch(setCreatePickingWaveError(false));
     try {
         const res = await fetch("/sinfony-api/picking-wave/", {
             method: "POST",
@@ -129,6 +131,7 @@ export const createPickingWave = ({ name, date }) => async (dispatch) => {
             console.error("Failed to create picking wave:", res.status);
             dispatch(setCreatePickingWaveError(true));
             dispatch(setCreatePickingWaveLoading(false));
+            return;
         }
 
         const data = await res.json();
@@ -144,9 +147,10 @@ export const createPickingWave = ({ name, date }) => async (dispatch) => {
     return null;
 };
 
-export const addItemsToPickingWave = (picking_wave_id, items) => async (dispatch) => {
-    console.log(picking_wave_id);
+export const addItemsToPickingWave = (picking_wave_id, sales_order_id, items) => async (dispatch) => {
     dispatch(setAddItemsLoading(true));
+    dispatch(setAddItemsError(false));
+
     try {
         const res = await fetch(`/sinfony-api/picking-wave/${picking_wave_id}`, {
             method: "PATCH",
@@ -158,8 +162,10 @@ export const addItemsToPickingWave = (picking_wave_id, items) => async (dispatch
             console.error("Failed to add items to picking wave:", await res.json());
             dispatch(setAddItemsError(true));
             dispatch(setAddItemsLoading(false));
+            return;
         }
 
+        dispatch(getSalesOrder(sales_order_id));
         dispatch(setAddItemsLoading(false));
 
     } catch (err) {
