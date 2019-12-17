@@ -42,9 +42,11 @@ const SalesOrderPage = ({ order_id }) => {
                 <Form.Item>
                     <Row type="flex" justify="space-between">
                         <Col span={10}>
-                            {form.getFieldDecorator("id", {})(
+                            {form.getFieldDecorator("id", {
+                                rules: [{ required: true, message: "Please choose picking wave!" }],
+
+                            })(
                                 <Select
-                                    required
                                     notFoundContent={pickingWavesLoading || pickingWavesError ? <Spin size="small" /> : null}
                                     placeholder="Select picking wave"
                                 >
@@ -110,19 +112,25 @@ const SalesOrderPage = ({ order_id }) => {
     const handleSubmitAddToPickingWave = () => {
         const { current: { form } } = formRef;
 
-        // Remove create picking wave fields because 🍝
-        const serialized = Object.entries(form.getFieldsValue())
-            .filter(([key]) =>
-                !["id", "name", "date"].includes(key))
-            .map(([key, quantity]) => ({
-                item_key: key,
-                sales_order: order.naturalKey,
-                name: items.not_shipped.find((e) => e.salesItem === key).description,
-                quantity,
-            }));
+        form.validateFields((err) => {
+            if (err) {
+                return;
+            }
 
-        dispatch(addItemsToPickingWave(form.getFieldValue("id"), order.naturalKey, serialized));
-        setVisibleModal(false);
+            // Remove create picking wave fields because 🍝
+            const serialized = Object.entries(form.getFieldsValue())
+                .filter(([key]) =>
+                    !["id", "name", "date"].includes(key))
+                .map(([key, quantity]) => ({
+                    item_key: key,
+                    sales_order: order.naturalKey,
+                    name: items.not_shipped.find((e) => e.salesItem === key).description,
+                    quantity,
+            }));
+            dispatch(addItemsToPickingWave(form.getFieldValue("id"), order.naturalKey, serialized));
+            setVisibleModal(false);
+        });
+
     };
 
     const openAddToPickingWaveModal = () => {
