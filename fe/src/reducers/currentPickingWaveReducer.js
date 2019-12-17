@@ -47,8 +47,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 info,
-                picked_items,
-                not_picked_items,
+                picked_items: [...picked_items],
+                not_picked_items: [...not_picked_items],
                 pickItemStatus: {
                     status: "success",
                     message: `Successfully picked Item ${item_key}`,

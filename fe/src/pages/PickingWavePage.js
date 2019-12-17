@@ -8,6 +8,7 @@ import { getPickingWave, pickItemFromPickingWave, finishCurrentPickingWave } fro
 import PageLayout from "../components/PageLayout";
 import WarehousePlantModal from "../components/WarehousePlantModal";
 import useItemWarehousesPath from "../hooks/useItemWarehousesPath";
+import useMoveItemsBetweenWarehouses from "../hooks/useMoveItemsBetweenWarehouses";
 
 const salesOrderWithLink = (sales_order_id) => (
     <Link to={`/sales/${sales_order_id}`}>{sales_order_id}</Link>
@@ -27,17 +28,58 @@ const PickingWavePage = ({ id }) => {
         dispatch(getPickingWave(id));
     }, [dispatch, id]);
 
+    const [moveItemsLoading, moveItemsError, moveItems] = useMoveItemsBetweenWarehouses();
+
     const {
         loading: pathLoading,
         path,
         zones,
     } = useItemWarehousesPath(not_picked_items);
 
+    const {
+        loading: pickedItemsZonesLoading,
+        zones: pickedItemsZones,
+    } = useItemWarehousesPath(picked_items, false);
+
     const pickItemButton = (_, item) => (
         <Button onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
             Pick
         </Button>
     );
+
+    const finishPickingWave = async () => {
+        const items_to_move_by_zone = {};
+
+        for (const { item_key, quantity } of picked_items) {
+            const warehouse_zone = pickedItemsZones[item_key];
+
+            if (!warehouse_zone) {
+                continue;
+            }
+
+            if (!items_to_move_by_zone[warehouse_zone]) {
+                items_to_move_by_zone[warehouse_zone] = [];
+            }
+
+            items_to_move_by_zone[warehouse_zone].push({
+                id: item_key,
+                quantity
+            })
+        }
+
+        await Promise.all(Object.entries(items_to_move_by_zone).map(([warehouse_zone, items]) => {
+            moveItems(warehouse_zone, "EXIT", items);
+        }));
+        dispatch(finishCurrentPickingWave(id));
+    }
+
+    const isFinishingPWaveAllowed = () => {
+        if (!not_picked_items || !pickedItemsZones) {
+            return false;
+        }
+
+        return (not_picked_items.length === 0) && (!Object.values(pickedItemsZones).includes(null));
+    }
 
     const not_picked_items_table_columns = [
         {
@@ -75,7 +117,16 @@ const PickingWavePage = ({ id }) => {
         },
     ];
 
-    const picked_items_table_columns = [...not_picked_items_table_columns.slice(0, 2), ...not_picked_items_table_columns.slice(3, 5)];
+
+    const finished_table_columns = [...not_picked_items_table_columns.slice(0, 2), ...not_picked_items_table_columns.slice(3, 5)];
+
+    const picked_items_table_columns = not_picked_items_table_columns.slice(0, 5);
+    picked_items_table_columns[2] = {
+        title: "Warehouse",
+        dataIndex: "item_key",
+        key: "warehouse",
+        render: (item_key) => pickedItemsZones && ((pickedItemsZones[item_key] && warehouseZoneWithLink(pickedItemsZones[item_key])) || "N/A"),
+    }
 
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
@@ -91,9 +142,9 @@ const PickingWavePage = ({ id }) => {
                     <WarehousePlantModal path={path} loading={pathLoading} />
                     <Button
                         type="primary"
-                        loading={loading}
-                        disabled={not_picked_items ? not_picked_items.length > 0 : true}
-                        onClick={() => dispatch(finishCurrentPickingWave(id))}
+                        loading={loading || pickedItemsZonesLoading}
+                        disabled={!isFinishingPWaveAllowed()}
+                        onClick={finishPickingWave}
                         style={{ marginLeft: "1em", marginRight: "1em" }}
                     >
                         Finish Picking Wave
@@ -127,7 +178,7 @@ const PickingWavePage = ({ id }) => {
                 <>
                     <Typography.Title level={4}>{"Picked Items"}</Typography.Title>
                     <Spin spinning={loading} size="large" tip="Loading picked Items...">
-                        <Table dataSource={picked_items} columns={picked_items_table_columns} rowKey="item_key" />
+                        <Table dataSource={picked_items} columns={(info && !info.is_done) ? picked_items_table_columns : finished_table_columns} rowKey="item_key" />
                     </Spin>
                 </>
             }
