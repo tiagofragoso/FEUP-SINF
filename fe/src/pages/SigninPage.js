@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col } from "antd";
+import { Row, Col, Typography } from "antd";
 
 import SigninForm from "../components/SigninForm";
 import { loginUser } from "../actions/localUserService";
@@ -53,10 +53,14 @@ const SigninPage = ({ navigate }) => {
 
     return (
         <Row
+            style={{ marginTop: "2em" }}
             justify="center"
             type="flex"
         >
             <Col md={12} lg={10} xl={6}>
+                <Row>
+                    <Typography.Title level={1}>Sign In</Typography.Title>
+                </Row>
                 <Row>
                     <SigninForm ref={formRef} onSubmit={onSubmit} />
                 </Row>
