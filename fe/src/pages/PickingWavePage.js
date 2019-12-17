@@ -28,7 +28,7 @@ const PickingWavePage = ({ id }) => {
         dispatch(getPickingWave(id));
     }, [dispatch, id]);
 
-    const [moveItemsLoading, moveItemsError, moveItems] = useMoveItemsBetweenWarehouses();
+    const [,, moveItems] = useMoveItemsBetweenWarehouses();
 
     const {
         loading: pathLoading,
@@ -42,7 +42,7 @@ const PickingWavePage = ({ id }) => {
     } = useItemWarehousesPath(picked_items, false);
 
     const pickItemButton = (_, item) => (
-        <Button onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
+        <Button disabled={!zones || !zones[item.item_key]} onClick={() => dispatch(pickItemFromPickingWave(item.picking_wave, item.item_key))}>
             Pick
         </Button>
     );
@@ -63,15 +63,15 @@ const PickingWavePage = ({ id }) => {
 
             items_to_move_by_zone[warehouse_zone].push({
                 id: item_key,
-                quantity
-            })
+                quantity,
+            });
         }
 
-        await Promise.all(Object.entries(items_to_move_by_zone).map(([warehouse_zone, items]) => {
-            moveItems(warehouse_zone, "EXIT", items);
-        }));
+        await Promise.all(Object.entries(items_to_move_by_zone).map(([warehouse_zone, items]) => (
+            moveItems(warehouse_zone, "EXIT", items)
+        )));
         dispatch(finishCurrentPickingWave(id));
-    }
+    };
 
     const isFinishingPWaveAllowed = () => {
         if (!not_picked_items || !pickedItemsZones) {
@@ -79,7 +79,7 @@ const PickingWavePage = ({ id }) => {
         }
 
         return (not_picked_items.length === 0) && (!Object.values(pickedItemsZones).includes(null));
-    }
+    };
 
     const not_picked_items_table_columns = [
         {
@@ -117,7 +117,6 @@ const PickingWavePage = ({ id }) => {
         },
     ];
 
-
     const finished_table_columns = [...not_picked_items_table_columns.slice(0, 2), ...not_picked_items_table_columns.slice(3, 5)];
 
     const picked_items_table_columns = not_picked_items_table_columns.slice(0, 5);
@@ -126,7 +125,7 @@ const PickingWavePage = ({ id }) => {
         dataIndex: "item_key",
         key: "warehouse",
         render: (item_key) => pickedItemsZones && ((pickedItemsZones[item_key] && warehouseZoneWithLink(pickedItemsZones[item_key])) || "N/A"),
-    }
+    };
 
     return (
         <PageLayout title={`Picking Wave ${id} ${info ? `- ${info.name}` : ""}`}>
@@ -150,7 +149,7 @@ const PickingWavePage = ({ id }) => {
                         Finish Picking Wave
                     </Button>
                     {info.progress &&
-                        <span style={{ fontSize: "1.2em" }}>
+                        <span style={{ fontSize: "1.15em" }}>
                             {`Progress ${info.progress}`}
                         </span>
                     }
@@ -165,6 +164,14 @@ const PickingWavePage = ({ id }) => {
                     <br/>
                 </>
             }
+
+
+            {info &&
+                <div style={{ marginBottom: "1.5em", fontSize: "1.15em" }}>
+                    <strong>Due Date:</strong> {info.due_date}
+                </div>
+            }
+
             {not_picked_items && not_picked_items.length > 0 &&
                 <>
                     <Typography.Title level={4}>{"Items to Pick"}</Typography.Title>

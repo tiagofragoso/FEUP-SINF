@@ -9,26 +9,21 @@ import PageLayout from "../components/PageLayout";
 
 const { TabPane } = Tabs;
 
-const IdWithLink = (id) => <Link to={id.toString()}>{id}</Link>
+const nameWithIdLink = (name, { id }) => <Link to={id.toString()}>{name}</Link>;
 
 const pwaveProgress = (progress) => progress ? `${progress}` : "-";
 
 const table_columns = [
     {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        render: IdWithLink,
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        render: nameWithIdLink,
     },
     {
         title: "Due Date",
         dataIndex: "due_date",
         key: "due_date",
-    },
-    {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
     },
     {
         title: "Progress",
@@ -52,8 +47,8 @@ const PickingWavesPage = () => {
         <PageLayout title="Picking Waves">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             <Spin spinning={loading} size="large" tip="Loading Picking Waves...">
-                {(pickingWaves && pickingWaves.active && pickingWaves.active.length === 0 && 
-                    pickingWaves.finished && pickingWaves.finished.length === 0) ? 
+                {(pickingWaves && pickingWaves.active && pickingWaves.active.length === 0 &&
+                    pickingWaves.finished && pickingWaves.finished.length === 0) ?
                     "There are no existent picking waves at the moment" :
                     <Tabs defaultActiveKey="1" animated={false} size="large">
                         <TabPane tab="Active" key="1">

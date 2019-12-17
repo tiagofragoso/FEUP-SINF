@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 import { getItemWarehouse } from "../actions/warehousesService";
 import { getPath } from "../actions/pickingWavesService";
-import { get } from "http";
 
 const useItemWarehousesPath = (items, get_path = true) => {
     const {
@@ -32,7 +31,6 @@ const useItemWarehousesPath = (items, get_path = true) => {
             const warehouse_zones = raw_warehouse_zones.filter((entry) => entry.itemWarehouse)
                 .map((entry) => entry.itemWarehouse.warehouse);
 
-                
             if (get_path) {
                 const { path } = await getPath(warehouse_zones);
 
@@ -44,7 +42,7 @@ const useItemWarehousesPath = (items, get_path = true) => {
 
         const target_items = items.map(({ item_key: itemKey, quantity: desiredQuantity }) => ({ itemKey, desiredQuantity }));
         fetchData(target_items);
-    }, [access_token, items]);
+    }, [access_token, get_path, items]);
 
     return {
         loading,
