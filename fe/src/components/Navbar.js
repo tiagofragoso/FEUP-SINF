@@ -1,13 +1,18 @@
 import React from "react";
 import { Link } from "@reach/router";
-import { Menu, Icon } from "antd";
+import { Menu, Icon, Avatar } from "antd";
 import { string } from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
 import logo from "../assets/logo.png";
-import UserArea from "./UserArea";
+import { clearLocalUser } from "../actions/localUserService";
 
 const Navbar = ({ currentPath }) => {
     const [, basePath] = currentPath.match(/^([^/]*)\/?.*$/);
+    const dispatch = useDispatch();
+    const {
+        user,
+    } = useSelector((state) => state.localUser);
 
     return (
         <Menu
@@ -53,11 +58,39 @@ const Navbar = ({ currentPath }) => {
                     Picking waves
                 </Link>
             </Menu.Item>
-            <Menu.Item>
-                <UserArea />
-            </Menu.Item>
+            <Menu.SubMenu
+                style={{ float: "right" }}
+                key="user-area"
+                title={
+                    <>
+                        {user ?
+                            <span>
+                                {user.name}
+                                <Avatar style={{ marginLeft: "1em" }}>
+                                    {getNameInitials(user.name)}
+                                </Avatar>
+                            </span>
+                            :
+                            <Link to="/sign-in">
+                                Sign In
+                            </Link>
+                        }
+                    </>
+                }
+            >
+                {user &&
+                    <Menu.Item key="logout" onClick={() => dispatch(clearLocalUser())}>
+                        Logout
+                    </Menu.Item>}
+            </Menu.SubMenu>
         </Menu>
     );
+};
+
+// See https://stackoverflow.com/a/33076482/5437511
+const getNameInitials = (name) => {
+    const initials = name.match(/\b\w/g) || [];
+    return ((initials.shift() || "") + (initials.pop() || "")).toUpperCase();
 };
 
 Navbar.propTypes = {
