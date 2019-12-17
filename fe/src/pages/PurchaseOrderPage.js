@@ -52,7 +52,7 @@ const PurchaseOrderPage = ({ order_id }) => {
 
     const handleSubmit = () => {
         const { current: { form } } = formRef;
-        dispatch(createGoodsReceipt(order, form.getFieldsValue()));
+        dispatch(createGoodsReceipt(order.naturalKey, form.getFieldsValue()));
         setVisibleModal(false);
     };
 

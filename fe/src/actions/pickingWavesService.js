@@ -119,7 +119,6 @@ export const getPath = async (warehouse_zones) => {
 
 export const createPickingWave = ({ name, date }) => async (dispatch) => {
     dispatch(setCreatePickingWaveLoading(true));
-    dispatch(setCreatePickingWaveError(false));
     try {
         const res = await fetch("/sinfony-api/picking-wave/", {
             method: "POST",
@@ -129,7 +128,7 @@ export const createPickingWave = ({ name, date }) => async (dispatch) => {
 
         if (res.status !== 201) {
             console.error("Failed to create picking wave:", res.status);
-            dispatch(setCreatePickingWaveError(true));
+            dispatch(setCreatePickingWaveError("Failed to create picking wave"));
             dispatch(setCreatePickingWaveLoading(false));
             return;
         }
@@ -141,7 +140,7 @@ export const createPickingWave = ({ name, date }) => async (dispatch) => {
         return data;
     } catch (err) {
         console.error("rip", err);
-        dispatch(setCreatePickingWaveError(true));
+        dispatch(setCreatePickingWaveError("idk"));
         dispatch(setCreatePickingWaveLoading(false));
     }
     return null;
@@ -149,7 +148,6 @@ export const createPickingWave = ({ name, date }) => async (dispatch) => {
 
 export const addItemsToPickingWave = (picking_wave_id, sales_order_id, items) => async (dispatch) => {
     dispatch(setAddItemsLoading(true));
-    dispatch(setAddItemsError(false));
 
     try {
         const res = await fetch(`/sinfony-api/picking-wave/${picking_wave_id}`, {
@@ -160,7 +158,7 @@ export const addItemsToPickingWave = (picking_wave_id, sales_order_id, items) =>
 
         if (res.status !== 201) {
             console.error("Failed to add items to picking wave:", await res.json());
-            dispatch(setAddItemsError(true));
+            dispatch(setAddItemsError("Failed to add items to picking wave"));
             dispatch(setAddItemsLoading(false));
             return;
         }
@@ -170,7 +168,7 @@ export const addItemsToPickingWave = (picking_wave_id, sales_order_id, items) =>
 
     } catch (err) {
         console.error("rip", err);
-        dispatch(setAddItemsError(true));
+        dispatch(setAddItemsError("idk"));
         dispatch(setAddItemsLoading(false));
     }
 };

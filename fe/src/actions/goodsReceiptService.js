@@ -8,7 +8,7 @@ const getGoodsReceipt = (login) => fetch(
     login.access_token
 );
 
-export const createGoodsReceipt = ({ id: orderId, naturalKey: orderKey }, items) => async (dispatch, getState) => {
+export const createGoodsReceipt = (orderKey, items) => async (dispatch, getState) => {
     dispatch(setGoodsReceiptLoading(true));
 
     const { login } = getState();
@@ -51,7 +51,7 @@ export const createGoodsReceipt = ({ id: orderId, naturalKey: orderKey }, items)
         }
 
         dispatch(setGoodsReceiptLoading(false));
-        dispatch(getPurchaseOrder(orderId));
+        dispatch(getPurchaseOrder(orderKey));
 
     } catch (err) {
         console.error("rip", err);

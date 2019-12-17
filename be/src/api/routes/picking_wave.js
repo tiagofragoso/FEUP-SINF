@@ -126,8 +126,8 @@ module.exports = (app) => {
         const { id } = req.params;
         const { items } = req.body;
 
-        await Promise.all(items.map(({ item_key, sales_order, name, quantity }) => {
-            const i = item.findAll({
+        await Promise.all(items.map(async ({ item_key, sales_order, name, quantity }) => {
+            const i = await item.findAll({
                 where: {
                     item_key,
                     sales_order,
@@ -136,8 +136,8 @@ module.exports = (app) => {
             });
 
             if (i[0]) {
-                return items[0].update({
-                    quantity: items[0].quantity + quantity,
+                return i[0].update({
+                    quantity: i[0].quantity + quantity,
                 });
             } else {
                 return item.create(

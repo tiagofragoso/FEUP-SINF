@@ -7,6 +7,7 @@ import HeaderWithAction from "../components/HeaderWithAction";
 import PageLayout from "../components/PageLayout";
 import { getSalesOrder } from "../actions/salesService";
 import { createPickingWave, addItemsToPickingWave, getPickingWaves } from "../actions/pickingWavesService";
+import { createDeliveryOrder } from "../actions/deliveryOrderService";
 import formatDate from "../utils/formatDate";
 
 const SalesOrderPage = ({ order_id }) => {
@@ -20,6 +21,9 @@ const SalesOrderPage = ({ order_id }) => {
     const {
         pickingWaves, pickingWavesLoading, pickingWavesError, createLoading, createError, addItemsLoading, addItemsError,
     } = useSelector((state) => state.pickingWaves);
+    const {
+        loading: deliveryOrderLoading, error: deliveryOrderError,
+    } = useSelector((state) => state.deliveryOrder);
 
     const [selectedItems, selectItem] = useState([]);
 
@@ -144,6 +148,11 @@ const SalesOrderPage = ({ order_id }) => {
         form.setFieldsValue({ id });
     };
 
+    const generateDeliveryOrder = () => {
+        const itemsToShip = items.picked.reduce((acc, item) => ({ ...acc, [item.salesItem]: item.quantity }), {});
+        dispatch(createDeliveryOrder(order.naturalKey, itemsToShip));
+    };
+
     // useEffect with empty dependencies array functions simillarly to componentDidMount
     useEffect(() => {
         // Can't request info from api before the login is ready
@@ -158,7 +167,10 @@ const SalesOrderPage = ({ order_id }) => {
         <PageLayout title="Sales Order">
             {error && <Alert message={(error && error.message) || "Error!"} type="error" />}
             {createError && <Alert message={(createError && createError.message) || "Error creating picking wave"} type="error" />}
-            {addItemsError && <Alert message={(addItemsError && addItemsError.message) || "Error adding items to picking wave"} type="error" />}
+            {addItemsError &&
+                <Alert message={(addItemsError && addItemsError.message) || "Error adding items to picking wave"} type="error" />}
+            {deliveryOrderError &&
+                <Alert message={(deliveryOrderError && deliveryOrderError.message) || "Error generating delivery order"} type="error" />}
             <Spin spinning={!access_token || loading} size="large" tip="Loading Sales Order...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
@@ -204,7 +216,41 @@ const SalesOrderPage = ({ order_id }) => {
                 <>
                     <br/>
                     <HeaderWithAction
-                        title={`Not Shipped (${items.not_shipped.length})`}
+                        title={`Picked (${items.picked.length})`}
+                        btnLabel="Generate delivery note"
+                        btnDisabled={items.picked.length === 0}
+                        btnLoading={deliveryOrderLoading}
+                        onClick={generateDeliveryOrder}
+                    />
+                    <br />
+                    <Table
+                        dataSource={items.picked} columns={[
+                            {
+                                title: "",
+                                dataIndex: "image_stuff",
+                                key: "image_stuff",
+                                // render: img,
+                            },
+                            {
+                                title: "Item",
+                                dataIndex: "salesItem",
+                                key: "salesItem",
+                            },
+                            {
+                                title: "Description",
+                                dataIndex: "description",
+                                key: "description",
+                            },
+                            {
+                                title: "Quantity",
+                                dataIndex: "quantity",
+                                key: "quantity",
+                            },
+                        ]} rowKey="salesItem"
+                    />
+                    <br/>
+                    <HeaderWithAction
+                        title={`Pending (${items.not_shipped.length})`}
                         btnLabel="Add to picking wave"
                         btnSubtitle={selectedItems.length > 0 ? `${selectedItems.length} lines selected` : ""}
                         btnDisabled={selectedItems.length === 0}
@@ -238,34 +284,6 @@ const SalesOrderPage = ({ order_id }) => {
                         ]} rowKey="salesItem"
                         rowSelection={{ selectedItems, onChange: selectItem }}
                     />
-
-                    <br/>
-                    <Typography.Title level={4}>Shipped ({items.shipped.length})</Typography.Title>
-                    <Table
-                        dataSource={items.shipped} columns={[
-                            {
-                                title: "",
-                                dataIndex: "image_stuff",
-                                key: "image_stuff",
-                                // render: img,
-                            },
-                            {
-                                title: "Item",
-                                dataIndex: "salesItem",
-                                key: "salesItem",
-                            },
-                            {
-                                title: "Description",
-                                dataIndex: "description",
-                                key: "description",
-                            },
-                            {
-                                title: "Quantity",
-                                dataIndex: "quantity",
-                                key: "quantity",
-                            },
-                        ]} rowKey="salesItem"
-                    />
                     <br/>
                     <Typography.Title level={4}>Awaiting picking ({items.not_picked.length})</Typography.Title>
                     <Table
@@ -293,10 +311,10 @@ const SalesOrderPage = ({ order_id }) => {
                             },
                         ]} rowKey="salesItem"
                     />
-                    <br/>
-                    <Typography.Title level={4}>Picked ({items.picked.length})</Typography.Title>
+                    <br />
+                    <Typography.Title level={4}>Shipped ({items.shipped.length})</Typography.Title>
                     <Table
-                        dataSource={items.picked} columns={[
+                        dataSource={items.shipped} columns={[
                             {
                                 title: "",
                                 dataIndex: "image_stuff",
@@ -319,7 +337,7 @@ const SalesOrderPage = ({ order_id }) => {
                                 key: "quantity",
                             },
                         ]} rowKey="salesItem"
-                    />
+                    /> 
                     <Modal
                         centered
                         title="Add to picking wave"
