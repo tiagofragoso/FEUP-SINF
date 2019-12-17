@@ -1,17 +1,21 @@
 const item = require("../../../models/item");
 
-const isUnique = async (req, res, next) => {
-    const { item_key } = req.body;
+// const get = async (req, res, next) => {
+//     const { item_key, picking_wave_id, sales_order } = req.body;
 
-    const i = await item.findByPk(item_key);
-    if (i) {
-        return res.status(400).json({
-            reason: "Item already exists",
-        });
-    }
+//     const i = await item.findAll({
+//         where: {
+//             item_key,
+//             picking_wave_id,
+//             sales_order,
+//         },
+//     });
+//     if (i[0]) {
+//         req.locals.i = i[0];
+//     }
 
-    return next();
-};
+//     return next();
+// };
 
 const exists = async (req, res, next) => {
     const { item_id } = req.params;
@@ -30,6 +34,5 @@ const exists = async (req, res, next) => {
 };
 
 module.exports = {
-    isUnique,
     exists,
 };

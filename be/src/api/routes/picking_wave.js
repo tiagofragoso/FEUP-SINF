@@ -122,16 +122,25 @@ module.exports = (app) => {
     /**
      * Adds new Items to Picking Wave
      */
-    router.patch("/:id", picking_wave_validators.addItems, picking_wave_validators.exists, item_validators.isUnique, async (req, res) => {
+    router.patch("/:id", picking_wave_validators.addItems, picking_wave_validators.exists, async (req, res) => {
         const { id } = req.params;
-
         const { items } = req.body;
 
-        const promises = [];
+        await Promise.all(items.map(({ item_key, sales_order, name, quantity }) => {
+            const i = item.findAll({
+                where: {
+                    item_key,
+                    sales_order,
+                    picking_wave_id: id,
+                },
+            });
 
-        for (const { item_key, sales_order, name, quantity } of items) {
-            promises.push(
-                item.create(
+            if (i[0]) {
+                return items[0].update({
+                    quantity: items[0].quantity + quantity,
+                });
+            } else {
+                return item.create(
                     {
                         item_key,
                         picking_wave_id: id,
@@ -142,10 +151,9 @@ module.exports = (app) => {
                     {
                         fields: ["item_key", "picking_wave_id", "sales_order", "name", "quantity"],
                     },
-                ));
-        }
-
-        await Promise.all(promises);
+                );
+            }
+        }));
 
         return res.status(201).send();
     });
