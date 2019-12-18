@@ -15,6 +15,7 @@ import PickingWavesPage from "./pages/PickingWavesPage";
 import PickingWavePage from "./pages/PickingWavePage";
 import WarehousePage from "./pages/WarehousePage";
 import SigninPage from "./pages/SigninPage";
+import Homepage from "./pages/Homepage";
 import RequiresAuth from "./components/RequiresAuth";
 
 const AppRouter = () => {
@@ -28,7 +29,7 @@ const AppRouter = () => {
     return (
         <Router>
             <Layout path="/">
-                <SalesOrdersPage path="/" />
+                <Homepage path="/" />
                 {/* Set Sales page as index for now */}
                 <RequiresAuth as={SalesOrdersPage} path="sales" />
                 <RequiresAuth as={SalesOrderPage} path="sales/:order_id" />
