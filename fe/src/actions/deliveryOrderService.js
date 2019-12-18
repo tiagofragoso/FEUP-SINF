@@ -2,6 +2,7 @@ import fetch from "../utils/fetchingWithToken";
 import config from "../config";
 import { setDeliveryOrderLoading, setDeliveryOrderError } from "./deliveryOrderActions";
 import { getSalesOrder } from "./salesService";
+import { createStockTransferOrder } from "./warehousesService";
 
 const getDeilveryOrderLines = (login) => fetch(
     `/api/${config.tenant}/${config.organization}/shipping/processOrders/1/1000?company=${config.company}`,
@@ -31,7 +32,12 @@ export const createDeliveryOrder = (orderKey, items) => async (dispatch, getStat
             SourceDocKey: sourceDocKey,
             SourceDocLineNumber: sourceDocLineNumber,
             quantity: items[item],
+            item: item,
         }));
+
+        const stockTransferRes = await createStockTransferOrder("EXIT", "01", orderLines.map(({ item: id, quantity }) =>
+            ({ id, quantity })), login.access_token);
+        await stockTransferRes.json();
 
         const deliveryOrderRes = await fetch(
             `/api/${config.tenant}/${config.organization}/shipping/processOrders/${config.company}`,
