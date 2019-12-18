@@ -23,6 +23,9 @@ const table_columns = [
         dataIndex: "documentDate",
         key: "documentDate",
         render: formatDate,
+        defaultSortOrder: "descend",
+        sorter: (a, b) => new Date(a.documentDate).getTime() - new Date(b.documentDate).getTime(),
+        sortDirections: ["descend", "ascend"],
     },
     {
         title: "Entity",
