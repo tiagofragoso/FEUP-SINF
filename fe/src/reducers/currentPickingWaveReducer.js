@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
                 not_picked_items: [...not_picked_items],
                 pickItemStatus: {
                     status: "success",
-                    message: `Successfully picked Item ${id}`,
+                    message: "Successfully picked Item",
                 },
             };
         case currentPickingWaveTypes.PICK_ITEM_ERROR:
