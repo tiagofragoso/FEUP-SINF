@@ -15,8 +15,8 @@ insert into warehouse_zones(id, x, y) values("EXIT", 8, 1);
 -- Picking Waves --
 -------------------
 
-insert into picking_waves(name, due_date, is_done) values("PickingWave01", "22-12-2019", "true");
-insert into picking_waves(name, due_date, is_done) values("PickingWave02", "23-12-2019", "true");
+insert into picking_waves(name, due_date, is_done) values("PickingWave01", "2019-12-19T12:35:00", "true");
+insert into picking_waves(name, due_date, is_done) values("PickingWave02", "2019-12-21T15:40:00", "true");
 
 -----------
 -- Items --
