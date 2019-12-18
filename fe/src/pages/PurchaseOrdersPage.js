@@ -17,15 +17,15 @@ const table_columns = [
         dataIndex: "naturalKey",
         key: "naturalKey",
         render: KeyWithLink,
+        defaultSortOrder: "descend",
+        sorter: (a, b) => Number(a.naturalKey.match(/\d+$/)[0]) - Number(b.naturalKey.match(/\d+$/)[0]),
+        sortDirections: ["descend", "ascend"],
     },
     {
         title: "Date",
         dataIndex: "documentDate",
         key: "documentDate",
         render: formatDate,
-        defaultSortOrder: "descend",
-        sorter: (a, b) => new Date(a.documentDate).getTime() - new Date(b.documentDate).getTime(),
-        sortDirections: ["descend", "ascend"],
     },
     {
         title: "Supplier",
