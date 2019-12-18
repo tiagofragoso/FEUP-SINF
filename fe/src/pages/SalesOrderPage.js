@@ -128,6 +128,7 @@ const SalesOrderPage = ({ order_id }) => {
                     quantity,
             }));
             dispatch(addItemsToPickingWave(form.getFieldValue("id"), order.naturalKey, serialized));
+            selectItem([]);
             setVisibleModal(false);
         });
 
@@ -290,7 +291,7 @@ const SalesOrderPage = ({ order_id }) => {
                                 key: "quantity",
                             },
                         ]} rowKey="salesItem"
-                        rowSelection={{ selectedItems, onChange: selectItem }}
+                        rowSelection={{ selectedRowKeys: selectedItems, onChange: selectItem }}
                     />
                     <br/>
                     <Typography.Title level={4}>Awaiting picking ({items.not_picked.length})</Typography.Title>
