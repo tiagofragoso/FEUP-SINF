@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
                         ...item,
                         quantity: item.quantity - movedItemEntry.quantity,
                     };
-                }),
+                }).filter((item) => item.quantity > 0),
             };
         case currentWarehouseTypes.SET_CURRENT_WAREHOUSE_INFO_LOADING:
             return {
