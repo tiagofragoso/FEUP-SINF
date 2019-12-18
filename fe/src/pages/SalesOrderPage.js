@@ -198,16 +198,10 @@ const SalesOrderPage = ({ order_id }) => {
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        {order && <Typography.Text>{order.buyerCustomerParty}</Typography.Text>}
-                    </Col>
-                    <Col>
                         {order && <Typography.Text>{order.buyerCustomerPartyName}</Typography.Text>}
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">
-                    <Col>
-                        {order && <Typography.Text>{order.unloadingPoint}</Typography.Text>}
-                    </Col>
                     <Col>
                         {order && <Typography.Text>{order.unloadingPointAddress}</Typography.Text>}
                     </Col>
@@ -215,9 +209,6 @@ const SalesOrderPage = ({ order_id }) => {
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
                         {order && <Typography.Text>{order.emailTo}</Typography.Text>}
-                    </Col>
-                    <Col>
-                        {order && <Typography.Text>{order.unloadingPostalZone}</Typography.Text>}
                     </Col>
                 </Row>
 
