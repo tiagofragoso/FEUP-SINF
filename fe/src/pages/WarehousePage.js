@@ -122,18 +122,12 @@ const WarehousePage = ({ warehouse_key }) => {
             <Spin spinning={warehouse_loading} size="large" tip="Loading Warehouse Details...">
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
-                        {warehouse_data &&
                         <Typography.Text
-                            copyable={warehouse_data.id}
+                            copyable={warehouse_key}
                             strong
                         >
-                            {warehouse_data.id}
-                        </Typography.Text>}
-                    </Col>
-                </Row>
-                <Row type="flex" justify="space-between" align="middle">
-                    <Col>
-                        <Typography.Text>{warehouse_key}</Typography.Text>
+                            {warehouse_key}
+                        </Typography.Text>
                     </Col>
                 </Row>
                 <Row type="flex" justify="space-between" align="middle">

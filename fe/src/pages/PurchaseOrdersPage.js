@@ -5,7 +5,7 @@ import { Link } from "@reach/router";
 
 import PageLayout from "../components/PageLayout";
 import { getPurchaseOrders } from "../actions/purchasesService";
-import OrderStatusLabel from "../components/OrderStatusLabel";
+import OrderStatusLabel, { rowToStatusLabel, OrderStatusLabelTypes } from "../components/OrderStatusLabel";
 import { formatDate } from "../utils/formatDate";
 
 
@@ -36,6 +36,12 @@ const table_columns = [
         title: "Status",
         key: "status",
         render: OrderStatusLabel,
+        filters: Object.values(OrderStatusLabelTypes)
+            .filter((type) => type !== OrderStatusLabelTypes.COMPLETE_SALE)
+            .map((type) => ({ value: type, text: type[0].toLocaleUpperCase() + type.slice(1).toLocaleLowerCase() }))
+            .map(({ value, text }) => ({ value, text: text.replace("_purchase", "") })),
+
+        onFilter: (value, record) => rowToStatusLabel(record) === value,
     },
 ];
 
